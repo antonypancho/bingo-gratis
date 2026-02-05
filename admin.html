@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel Admin - Bingo</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+
+    header {
+      background: #1e293b;
+      padding: 20px;
+      font-size: 22px;
+      color: #38bdf8;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .top-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #1e293b;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #334155;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: #0f172a;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background: #273449;
+    }
+
+    .btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .btn-approve {
+      background: #22c55e;
+      color: #0f172a;
+    }
+
+    .btn-approve:hover {
+      background: #16a34a;
+    }
+
+    .btn-reject {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-reject:hover {
+      background: #dc2626;
+    }
+
+    .btn-view {
+      background: #38bdf8;
+      color: #0f172a;
+    }
+
+    .btn-view:hover {
+      background: #0ea5e9;
+    }
+
+    .btn-clear {
+      background: #7f1d1d;
+      color: #fca5a5;
+    }
+
+    .btn-clear:hover {
+      background: #991b1b;
+    }
+
+    select {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+    }
+
+    /* Modal comprobante */
+    #modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    #modal-img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    /* Modal lista jugadores */
+    #modalLista {
+      display:none;
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.85);
+      justify-content:center;
+      align-items:center;
+      z-index:9999;
+    }
+
+    #listaBox {
+      background:#1e293b;
+      padding:20px;
+      border-radius:12px;
+      width:90%;
+      max-width:400px;
+      color:#e2e8f0;
+      font-size:16px;
+    }
+
+    #listaContenido {
+      white-space:pre-wrap;
+      font-size:15px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>🎛 Panel Admin — Control de Compras</header>
+
+<div class="container">
+
+  <div class="top-buttons">
+    <button class="btn btn-clear" onclick="borrarTodo()">🗑 Borrar todo</button>
+
+    <select id="filtroEstado" onchange="cargarCompras()">
+      <option value="todos">Todos</option>
+      <option value="pendiente">Pendiente</option>
+      <option value="aprobado">Aprobado</option>
+      <option value="rechazado">Rechazado</option>
+    </select>
+
+    <button class="btn btn-view" onclick="listaJugadores()">📋 Lista de jugadores</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Usuario</th>
+        <th>Teléfono</th>
+        <th>Cartones</th>
+        <th>Monto</th>
+        <th>Método</th>
+        <th>Comprobante</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="tablaCompras"></tbody>
+  </table>
+</div>
+
+<!-- MODAL COMPROBANTE -->
+<div id="modal">
+  <img id="modal-img" src="">
+</div>
+
+<!-- MODAL LISTA DE JUGADORES -->
+<div id="modalLista">
+  <div id="listaBox">
+    <h2 style="margin-top:0; color:#38bdf8;">📋 Lista de jugadores</h2>
+    <pre id="listaContenido"></pre>
+
+    <button onclick="cerrarLista()" style="
+      margin-top:15px;
+      width:100%;
+      padding:10px;
+      background:#38bdf8;
+      border:none;
+      border-radius:8px;
+      font-weight:600;
+      cursor:pointer;
+      color:#0f172a;
+    ">Cerrar</button>
+  </div>
+</div>
+
+<script type="module">
+  import { db } from "./firebase.js";
+  import {
+    collection,
+    getDocs,
+    doc,
+    getDoc,
+    updateDoc,
+    setDoc,
+    deleteDoc
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  const tabla = document.getElementById("tablaCompras");
+
+  async function cargarCompras() {
+    tabla.innerHTML = "";
+
+    const filtro = document.getElementById("filtroEstado").value;
+
+    const querySnapshot = await getDocs(collection(db, "compras"));
+
+    querySnapshot.forEach((docu) => {
+      const data = docu.data();
+
+      if (filtro !== "todos" && data.estado !== filtro) return;
+
+      const fila = document.createElement("tr");
+
+      fila.innerHTML = `
+        <td>${data.usuario ?? "Sin nombre"}</td>
+        <td>${data.telefono ?? "N/A"}</td>
+        <td>${data.cartones.join(", ")}</td>
+        <td>$${data.monto}</td>
+        <td>${data.metodo}</td>
+        <td>
+          <button class="btn btn-view" onclick="verImagen('${data.comprobante}')">Ver</button>
+        </td>
+        <td>${data.estado}</td>
+        <td>
+          <button class="btn btn-approve" onclick="aprobar('${docu.id}')">Aprobar</button>
+          <button class="btn btn-reject" onclick="rechazar('${docu.id}')">Rechazar</button>
+        </td>
+      `;
+
+      tabla.appendChild(fila);
+    });
+  }
+
+  window.cargarCompras = cargarCompras;
+
+  window.verImagen = function(url) {
+    const modal = document.getElementById("modal");
+    const img = document.getElementById("modal-img");
+
+    img.src = url;
+    modal.style.display = "flex";
+
+    modal.onclick = () => {
+      modal.style.display = "none";
+    };
+  };
+
+  window.aprobar = async function(id) {
+    await updateDoc(doc(db, "compras", id), {
+      estado: "aprobado"
+    });
+
+    const compraRef = doc(db, "compras", id);
+    const compraSnap = await getDoc(compraRef);
+    const compra = compraSnap.data();
+
+    for (let num of compra.cartones) {
+      await setDoc(doc(db, "cartones", num.toString()), {
+        estado: "vendido"
+      });
+    }
+
+    alert("Compra aprobada y cartones vendidos.");
+    cargarCompras();
+  };
+
+  window.rechazar = async function(id) {
+    await updateDoc(doc(db, "compras", id), {
+      estado: "rechazado"
+    });
+
+    const compraRef = doc(db, "compras", id);
+    const compraSnap = await getDoc(compraRef);
+    const compra = compraSnap.data();
+
+    for (let num of compra.cartones) {
+      await setDoc(doc(db, "cartones", num.toString()), {
+        estado: "libre"
+      });
+    }
+
+    alert("Compra rechazada y cartones liberados.");
+    cargarCompras();
+  };
+
+  window.borrarTodo = async function() {
+    if (!confirm("¿Seguro que deseas borrar TODOS los registros?")) return;
+
+    const comprasSnap = await getDocs(collection(db, "compras"));
+    comprasSnap.forEach(async (d) => {
+      await deleteDoc(doc(db, "compras", d.id));
+    });
+
+    const cartSnap = await getDocs(collection(db, "cartones"));
+    cartSnap.forEach(async (d) => {
+      await deleteDoc(doc(db, "cartones", d.id));
+    });
+
+    alert("Todos los registros han sido eliminados.");
+    cargarCompras();
+  };
+
+  // 🔥 LISTA DE JUGADORES: APROBADOS POR CARTÓN + PENDIENTES COMO ANTES
+  window.listaJugadores = async function() {
+    const snap = await getDocs(collection(db, "compras"));
+
+    let aprobadosPorCarton = [];
+    let pendientes = [];
+
+    snap.forEach((d) => {
+      const data = d.data();
+
+      if (data.estado === "aprobado") {
+        data.cartones.forEach((num) => {
+          aprobadosPorCarton.push({
+            numero: num,
+            nombre: data.usuario
+          });
+        });
+      }
+
+      if (data.estado === "pendiente") {
+        pendientes.push({
+          nombre: data.usuario,
+          cartones: data.cartones
+        });
+      }
+    });
+
+    // Ordenar aprobados por número de cartón
+    aprobadosPorCarton.sort((a, b) => a.numero - b.numero);
+
+    let texto = "";
+
+    // ✔ APROBADOS POR CARTÓN
+    texto += "✔ Personas aprobadas:\n\n";
+    if (aprobadosPorCarton.length === 0) {
+      texto += "  Ninguna\n";
+    } else {
+      aprobadosPorCarton.forEach((item) => {
+        texto += `${item.numero} ${item.nombre}\n`;
+      });
+    }
+
+    // ⏳ PENDIENTES (igual que antes)
+    texto += "\n⏳ Personas pendientes:\n\n";
+    if (pendientes.length === 0) {
+      texto += "  Ninguna\n";
+    } else {
+      pendientes.forEach((p, i) => {
+        texto += `${i + 1}. ${p.nombre} — Cartones: ${p.cartones.join(", ")}\n`;
+      });
+    }
+
+    document.getElementById("listaContenido").innerText = texto;
+    document.getElementById("modalLista").style.display = "flex";
+  };
+
+  window.cerrarLista = function() {
+    document.getElementById("modalLista").style.display = "none";
+  };
+
+  cargarCompras();
+</script>
+
+</body>
+</html>

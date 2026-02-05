@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comprar Cartones</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+
+    header {
+      background: #1e293b;
+      padding: 20px;
+      font-size: 20px;
+      color: #38bdf8;
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .container {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .top-panel {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      line-height: 1.6;
+    }
+
+    .top-panel h2 {
+      margin-top: 0;
+      color: #38bdf8;
+    }
+
+    .info-box {
+      background: #0f172a;
+      border: 2px solid #38bdf8;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+    }
+
+    .info-box p {
+      font-size: 16px;
+      margin: 6px 0;
+    }
+
+    #comprobante {
+      padding: 14px;
+      background: #0ea5e9;
+      border-radius: 10px;
+      border: 2px dashed #38bdf8;
+      cursor: pointer;
+      width: 100%;
+      color: #e2e8f0;
+      font-weight: 600;
+      margin-top: 10px;
+      transition: 0.25s ease;
+
+      
+    }
+
+    #comprobante:hover {
+      background: #38bdf8;
+      border-color: #0ea5e9;
+      transform: scale(1.03);
+    }
+
+    .comprobante-btn {
+      width: 100%;
+      padding: 14px 10px;
+      background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+      color: #0f172a;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      margin-top: 18px;
+      cursor: pointer;
+      transition: 0.25s ease;
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35);
+    }
+
+    .comprobante-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 6px 18px rgba(56, 189, 248, 0.45);
+    }
+
+    .cartones {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 12px;
+    }
+
+    .cuadro {
+      background: #1e293b;
+      border: 2px solid #334155;
+      border-radius: 25px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: 0.25s ease;
+      padding: 0 12px;
+    }
+
+    .cuadro:hover {
+      border-color: #38bdf8;
+      color: #38bdf8;
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+    }
+
+    .cuadro.seleccionado {
+      background: #14532d;
+      border-color: #22c55e;
+      color: #22c55e;
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
+      transform: translateY(-3px) scale(1.05);
+    }
+
+    .cuadro.bloqueado {
+      background: #3f3f46;
+      border-color: #52525b;
+      color: #a1a1aa;
+      cursor: not-allowed;
+      opacity: 0.6;
+      transform: none;
+      box-shadow: none;
+    }
+
+    #modalError {
+      display:none;
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.75);
+      justify-content:center;
+      align-items:center;
+      z-index:99999;
+    }
+
+    #modalErrorBox {
+      background:#7f1d1d;
+      padding:25px;
+      border-radius:15px;
+      width:90%;
+      max-width:380px;
+      color:#fca5a5;
+      text-align:center;
+      box-shadow:0 0 25px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+
+<body>
+
+<header style="background:#1e293b; padding:0; text-align:center;">
+  <img src="banner.png" alt="Bingo Magic Banner" style="width:100%; max-width:500px; margin:auto; display:block;">
+</header>
+
+<div class="container">
+  <div class="top-panel">
+    <h2>🧙‍♂️ ¡BINGO MAGIC GRATIS! 🎰</h2>
+    <p>¡Es tu momento de ganar sin pagar nada! Solo sigue estos pasos y deja que la suerte te acompañe:</p>
+    <p>🎟️ <b>¿Cómo participar?</b><br>
+    Elige tu cartón: Selecciona el que más te guste en el panel de aquí abajo. 👇</p>
+    <p>Comparte la magia: Publica en tu Estado de WhatsApp la imagen que subimos diariamente al grupo.</p>
+    <p>¡Gana cartones gratis! Según el alcance de tu estado, ¡así de fácil!</p>
+    <p><b>📈 Premios por Visualizaciones:</b><br>
+    👀 50 Vistas ➔ 🎫 1 Cartón<br>
+    👀 100 Vistas ➔ 🎫🎫 2 Cartones<br>
+    👀 200 Vistas ➔ 🎫🎫🎫🎫🎫 5 Cartones</p>
+    <p><b>⚠️ REGLA DE ORO:</b><br>
+    Para que tu participación sea válida, el estado debe permanecer activo durante las 24 horas. ¡No lo borres o quedarás descalificado! 🚫</p>
+    <hr style="opacity:0.3; margin:15px 0;">
+    <div class="info-box">
+      <p id="infoNombre"></p>
+      <p id="infoCartones"></p>
+    </div>
+    <h3>🧾 Subir comprobante</h3>
+    <input type="file" id="comprobante" accept="image/*" />
+    <button class="comprobante-btn" onclick="enviar()">🛒 Enviar Compra</button>
+  </div>
+  <div class="cartones" id="cartonesContainer"></div>
+</div>
+
+<div id="modalConfirm" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); justify-content:center; align-items:center; z-index:99999;">
+  <div style="background:#1e293b; padding:25px; border-radius:15px; width:90%; max-width:380px; color:#e2e8f0; text-align:center; box-shadow:0 0 20px rgba(0,0,0,0.4); animation: zoomIn 0.25s ease;">
+    <h2 style="margin-top:0; color:#38bdf8; font-size:22px;">🎉 Bingo Magic Gratis 🎉</h2>
+    <p id="modalConfirmMensaje" style="font-size:16px; line-height:1.5;"></p>
+    <button onclick="cerrarModalConfirm()" style="margin-top:20px; width:100%; padding:12px; background:#38bdf8; border:none; border-radius:10px; font-weight:600; cursor:pointer; color:#0f172a; font-size:15px;">Continuar</button>
+  </div>
+</div>
+
+<style>
+@keyframes zoomIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+</style>
+
+<div id="modalError">
+  <div id="modalErrorBox">
+    <h2 style="margin-top:0; color:#fecaca;">❗ ALERTA ❗</h2>
+    <p id="modalErrorMensaje" style="font-size:16px; line-height:1.5;"></p>
+    <button onclick="cerrarModalError()" style="margin-top:20px; width:100%; padding:12px; background:#f87171; border:none; border-radius:10px; font-weight:600; cursor:pointer; color:#7f1d1d; font-size:15px;">Cambiar Cartón</button>
+  </div>
+</div>
+
+<script type="module">
+  import { db } from "./firebase.js";
+  import { 
+    collection, Timestamp, getDocs, doc, query, where, runTransaction, addDoc
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  const totalCartones = 150;
+  const contenedor = document.getElementById("cartonesContainer");
+  let seleccionados = [];
+
+  const nombreUsuario = localStorage.getItem("nombre");
+  const telefonoUsuario = localStorage.getItem("telefono");
+
+  if (!nombreUsuario || !telefonoUsuario) {
+    alert("Debes iniciar sesión primero.");
+    window.location.href = "index.html";
+  }
+
+  document.getElementById("infoNombre").innerHTML = `👤 <b>Nombre:</b> ${nombreUsuario}`;
+  document.getElementById("infoCartones").innerHTML = `🎟️ <b>Cartones:</b> Ninguno seleccionado`;
+
+  let cartonesBloqueados = [];
+  let envioEnProgreso = false;
+
+  window.mostrarModalError = function(cartones) {
+    const modal = document.getElementById("modalError");
+    const mensaje = document.getElementById("modalErrorMensaje");
+    mensaje.innerHTML = `Cartón(es) no disponibles: <b>${cartones.join(", ")}</b><br><br>Cámbialo para continuar la transacción.`;
+    modal.style.display = "flex";
+  };
+
+  window.cerrarModalError = function() {
+    document.getElementById("modalError").style.display = "none";
+  };
+
+  async function verificarCompraCreada(nombre, cartones) {
+    const q = query(collection(db, "compras"), where("usuario", "==", nombre), where("cartones", "array-contains-any", cartones));
+    const snap = await getDocs(q);
+    return !snap.empty;
+  }
+
+  async function cargarBloqueados() {
+    const snap = await getDocs(collection(db, "cartones"));
+    cartonesBloqueados = [];
+    snap.forEach(docu => {
+      const estado = docu.data().estado;
+      if (estado === "reservado" || estado === "vendido") {
+        cartonesBloqueados.push(parseInt(docu.id));
+      }
+    });
+  }
+
+  await cargarBloqueados();
+
+  function renderizarCartones() {
+    contenedor.innerHTML = "";
+    for (let i = 1; i <= totalCartones; i++) {
+      const bloqueado = cartonesBloqueados.includes(i);
+      contenedor.innerHTML += `
+        <div class="cuadro ${bloqueado ? "bloqueado" : ""}" id="cuadro-${i}" ${bloqueado ? "" : `onclick="seleccionar(${i})"`}>
+          ${i}
+        </div>
+      `;
+    }
+    seleccionados.forEach(num => {
+      const cuadro = document.getElementById(`cuadro-${num}`);
+      if (cuadro && !cuadro.classList.contains("bloqueado")) {
+        cuadro.classList.add("seleccionado");
+      }
+    });
+  }
+
+  renderizarCartones();
+
+  window.seleccionar = function(num) {
+    const cuadro = document.getElementById(`cuadro-${num}`);
+    if (!seleccionados.includes(num)) {
+      seleccionados.push(num);
+      cuadro.classList.add("seleccionado");
+    } else {
+      seleccionados = seleccionados.filter(n => n !== num);
+      cuadro.classList.remove("seleccionado");
+    }
+    document.getElementById("infoCartones").innerHTML = `🎟️ <b>Cartones:</b> ${seleccionados.length > 0 ? seleccionados.join(", ") : "Ninguno seleccionado"}`;
+  }
+
+  async function subirACloudinary(archivo) {
+    const url = "https://api.cloudinary.com/v1_1/dtmepdpgo/image/upload";
+    const formData = new FormData();
+    formData.append("file", archivo);
+    formData.append("upload_preset", "bingo_uploads");
+    const respuesta = await fetch(url, { method: "POST", body: formData });
+    const data = await respuesta.json();
+    return data.secure_url;
+  }
+
+  window.mostrarModalConfirm = function(nombre, cartones) {
+    const modal = document.getElementById("modalConfirm");
+    const mensaje = document.getElementById("modalConfirmMensaje");
+    mensaje.innerHTML = `👋 Hola <b>${nombre}</b><br><br>🧩 Compraste los cartones:<br><b>${cartones.join(", ")}</b><br><br>⏳ Tu compra está en revisión.<br>🍀✨ ¡Mucha suerte te desea <b>Bingo Magic</b>!`;
+    modal.style.display = "flex";
+  };
+
+  window.cerrarModalConfirm = function() {
+    document.getElementById("modalConfirm").style.display = "none";
+    window.location.href = "login.html"; 
+  };
+
+  window.enviar = async function() {
+    if (envioEnProgreso) return;
+    const btn = document.querySelector(".comprobante-btn");
+    const archivo = document.getElementById("comprobante").files[0];
+
+    if (seleccionados.length === 0) return alert("Debes seleccionar al menos un cartón.");
+    if (!archivo) return alert("Debes subir el comprobante.");
+
+    envioEnProgreso = true;
+    btn.disabled = true;
+    btn.style.opacity = "0.5";
+    btn.innerText = "Verificando números...";
+
+    try {
+      const imagenURL = await subirACloudinary(archivo);
+
+      // TRANSACCIÓN CORREGIDA PARA RAMÓN Y MARÍA
+      await runTransaction(db, async (transaction) => {
+        let ocupados = [];
+        for (let num of seleccionados) {
+          const cartonRef = doc(db, "cartones", num.toString());
+          const snap = await transaction.get(cartonRef);
+          if (snap.exists()) {
+            const st = snap.data().estado;
+            if (st === "reservado" || st === "vendido") {
+              ocupados.push(num);
+            }
+          }
+        }
+
+        if (ocupados.length > 0) {
+          // Si el cartón se ocupó mientras Ramón/María hacían el proceso, lanzamos el error aquí.
+          throw `El cartón ${ocupados.join(", ")} no está disponible, cámbialo para continuar.`;
+        }
+
+        const nuevaCompraRef = doc(collection(db, "compras"));
+        transaction.set(nuevaCompraRef, {
+          usuario: nombreUsuario,
+          telefono: telefonoUsuario,
+          cartones: seleccionados,
+          comprobante: imagenURL,
+          estado: "pendiente",
+          fecha: Timestamp.now()
+        });
+
+        for (let num of seleccionados) {
+          transaction.set(doc(db, "cartones", num.toString()), { estado: "reservado" }, { merge: true });
+        }
+      });
+
+      mostrarModalConfirm(nombreUsuario, seleccionados);
+      envioEnProgreso = false;
+      btn.disabled = false;
+      btn.style.opacity = "1";
+      btn.innerText = "🛒 Enviar Compra";
+
+    } catch (error) {
+      console.error("ERROR:", error);
+      let nums = [];
+      if (typeof error === "string") {
+        const match = error.match(/\d+/g);
+        if (match) nums = match.map(n => parseInt(n));
+      }
+
+      if (nums.length > 0) {
+        // Filtramos para que no pierda los que sí estaban libres, solo quite los ocupados
+        seleccionados = seleccionados.filter(n => !nums.includes(n));
+        mostrarModalError(nums);
+      } else {
+        alert("Ocurrió un error. Inténtalo de nuevo.");
+      }
+
+      envioEnProgreso = false;
+      btn.disabled = false;
+      btn.style.opacity = "1";
+      btn.innerText = "🛒 Enviar Compra";
+      await cargarBloqueados();
+      renderizarCartones();
+    }
+  };
+</script>
+</body>
+</html>
