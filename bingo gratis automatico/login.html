@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo Online - Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="login-body">
+
+<!-- BANNER ANIMADO -->
+<div class="banner-slide">
+  <span>🚀 Inicia sesión en Bingo Magic GRATIS ✨ | 🎉 ¡Comienza a ganar desde YA! 🍀🔥</span>
+</div>
+
+<!-- CONTENEDOR LOGIN -->
+<div class="login-container">
+    <div class="login-card">
+        <h1 class="login-title">🧙‍♂️ ¡Bingo Magic Gratis!</h1>
+        <p class="login-subtitle">Ingresa para continuar</p>
+
+        <!-- INPUT NOMBRE -->
+        <div class="input-editable">
+            <input id="nombre" type="text" placeholder="Nombre completo" class="login-input">
+            <span class="edit-icon" onclick="editarCampo('nombre')">✏️</span>
+        </div>
+
+        <!-- INPUT TELEFONO -->
+        <div class="input-editable">
+            <input id="telefono" type="text" placeholder="Número de WhatsApp" class="login-input">
+            <span class="edit-icon" onclick="editarCampo('telefono')">✏️</span>
+        </div>
+
+        <button class="login-btn" onclick="entrar()">Entrar</button>
+
+        <hr style="margin:20px 0; opacity:0.3;">
+
+        <button class="login-btn-secondary" onclick="abrirLista()">📋 Lista de jugadores</button>
+
+        <button class="login-btn-secondary" onclick="window.location.href='https://bingomagic.online/bingo8pm/'">
+          🎮 Jugar cartones
+        </button>
+    </div>
+</div>
+
+<!-- MODAL LISTA DE JUGADORES -->
+<div id="modalLista" style="
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.85);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+">
+  <div id="listaBox" style="
+    background:#1e293b;
+    padding:20px;
+    border-radius:12px;
+    width:90%;
+    max-width:400px;
+    color:#e2e8f0;
+    font-size:16px;
+    max-height:80vh;
+    overflow-y:auto;
+  ">
+    <h2 style="margin-top:0; color:#38bdf8; text-align:center;">📋 Lista de jugadores</h2>
+
+    <!-- BUSCADOR -->
+    <input id="buscador" type="text" placeholder="Buscar..." 
+      style="
+        width:100%;
+        padding:10px;
+        border-radius:8px;
+        border:none;
+        background:#334155;
+        color:#e2e8f0;
+        margin-bottom:15px;
+      "
+      oninput="filtrarLista()"
+    >
+
+    <pre id="listaContenido" style="white-space:pre-wrap; font-size:15px;"></pre>
+
+    <button onclick="cerrarLista()" style="
+      margin-top:15px;
+      width:100%;
+      padding:10px;
+      background:#38bdf8;
+      border:none;
+      border-radius:8px;
+      font-weight:600;
+      cursor:pointer;
+      color:#0f172a;
+    ">Cerrar</button>
+  </div>
+</div>
+
+<!-- FOOTER ABAJO -->
+<footer style="
+  margin-top:40px;
+  padding:20px;
+  text-align:center;
+  color:#94a3b8;
+  font-size:14px;
+  opacity:0.95;
+  width:100%;
+">
+
+  <div style="margin-bottom:12px; font-size:15px; font-weight:600;">
+    Seguinos en nuestras redes sociales:
+  </div>
+
+  <div style="margin-bottom:18px;">
+    <a href="https://instagram.com/bingomagic166/" target="_blank" 
+       style="color:#38bdf8; text-decoration:none; font-weight:600; font-size:16px;">
+      📸 Instagram
+    </a>
+  </div>
+
+  <div style="font-size:13px; opacity:0.8; margin-bottom:10px;">
+    © 2026 <b>Bingomagic.online</b> — Diversión Mágica Asegurada ✨
+  </div>
+
+  <div style="font-size:14px;">
+    desarrollado por: 
+    <a href="https://api.whatsapp.com/send?phone=584243533043&text=Quiero%20informacion%20sobre%20paginas%20de%20bingo"
+       target="_blank"
+       style="color:#38bdf8; font-weight:700; text-decoration:none;">
+      Antony Magic
+    </a>
+  </div>
+
+</footer>
+
+<!-- FIREBASE -->
+<script type="module" src="firebase.js"></script>
+
+<!-- SCRIPT LISTA DE JUGADORES -->
+<script type="module">
+import { db } from "./firebase.js";
+import { collection, getDocs } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+let listaGlobal = {
+  aprobados: [],
+  pendientes: []
+};
+
+window.abrirLista = async function () {
+  const snap = await getDocs(collection(db, "compras"));
+
+  let aprobadosPorCarton = [];
+  let pendientes = [];
+
+  snap.forEach((d) => {
+    const data = d.data();
+
+    if (data.estado === "aprobado") {
+      data.cartones.forEach((num) => {
+        aprobadosPorCarton.push({
+          numero: num,
+          nombre: data.usuario
+        });
+      });
+    }
+
+    if (data.estado === "pendiente") {
+      pendientes.push({
+        nombre: data.usuario,
+        cartones: data.cartones
+      });
+    }
+  });
+
+  aprobadosPorCarton.sort((a, b) => a.numero - b.numero);
+
+  listaGlobal = { aprobados: aprobadosPorCarton, pendientes };
+
+  renderLista(aprobadosPorCarton, pendientes);
+
+  document.getElementById("modalLista").style.display = "flex";
+};
+
+function renderLista(aprobados, pendientes) {
+  let texto = "";
+
+  texto += "✔ Personas aprobadas:\n\n";
+  if (aprobados.length === 0) {
+    texto += "  Ninguna\n";
+  } else {
+    aprobados.forEach((item) => {
+      texto += `${item.numero} ${item.nombre}\n`;
+    });
+  }
+
+  texto += "\n⏳ Personas pendientes:\n\n";
+  if (pendientes.length === 0) {
+    texto += "  Ninguna\n";
+  } else {
+    pendientes.forEach((p, i) => {
+      texto += `${i + 1}. ${p.nombre} — Cartones: ${p.cartones.join(", ")}\n`;
+    });
+  }
+
+  document.getElementById("listaContenido").innerText = texto;
+}
+
+window.filtrarLista = function () {
+  const texto = document.getElementById("buscador").value.toLowerCase();
+
+  const { aprobados, pendientes } = listaGlobal;
+
+  const filtradosAprobados = aprobados.filter(item =>
+    item.nombre.toLowerCase().includes(texto) ||
+    String(item.numero).includes(texto)
+  );
+
+  const filtradosPendientes = pendientes.filter(item =>
+    item.nombre.toLowerCase().includes(texto)
+  );
+
+  renderLista(filtradosAprobados, filtradosPendientes);
+};
+
+window.cerrarLista = function () {
+  document.getElementById("modalLista").style.display = "none";
+};
+</script>
+
+<!-- SCRIPT LOGIN -->
+<script type="module">
+import { db } from "./firebase.js";
+import { collection, getDocs, addDoc, updateDoc, doc, Timestamp } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// Autocompletar si ya existe
+window.addEventListener("load", () => {
+    const nombre = localStorage.getItem("nombre");
+    const telefono = localStorage.getItem("telefono");
+
+    if (nombre) {
+        document.getElementById("nombre").value = nombre;
+        document.getElementById("nombre").readOnly = true;
+    }
+
+    if (telefono) {
+        document.getElementById("telefono").value = telefono;
+        document.getElementById("telefono").readOnly = true;
+    }
+});
+
+// Activar edición
+window.editarCampo = function (id) {
+    const input = document.getElementById(id);
+    input.readOnly = false;
+    input.focus();
+};
+
+// Entrar
+window.entrar = async function () {
+    const nombre = document.getElementById("nombre").value.trim();
+    const telefono = document.getElementById("telefono").value.trim();
+
+    if (!nombre || !telefono) {
+        alert("Debes llenar todos los campos.");
+        return;
+    }
+
+    const snap = await getDocs(collection(db, "usuarios"));
+    let existe = false;
+    let idExistente = null;
+
+    snap.forEach(docu => {
+        if (docu.data().telefono === telefono) {
+            existe = true;
+            idExistente = docu.id;
+        }
+    });
+
+    if (existe) {
+        await updateDoc(doc(db, "usuarios", idExistente), {
+            nombre: nombre,
+            telefono: telefono
+        });
+    } else {
+        await addDoc(collection(db, "usuarios"), {
+            nombre: nombre,
+            telefono: telefono,
+            fecha: Timestamp.now()
+        });
+    }
+
+    localStorage.setItem("nombre", nombre);
+    localStorage.setItem("telefono", telefono);
+
+    window.location.href = "comprar.html";
+}
+</script>
+
+</body>
+</html>
