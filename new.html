@@ -3,29 +3,23 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Redirección a WhatsApp</title>
-
+  <title>Juegos Magic</title>
   <script>
     (function(){
-      // Enlace oficial del grupo de WhatsApp
-      const link = "https://chat.whatsapp.com/BYvxfXtRCNSDujxkvgo78q";
-
-      // Redirección inmediata
-      window.location.href = link;
+      const wa = "whatsapp://chat?code=BYvxfXtRCNSDujxkvgo78q";
+      // Intentamos redirigir con replace para no quedar en el historial
+      try {
+        location.replace(wa);
+      } catch (e) {
+        // Fallback sencillo si el esquema whatsapp:// falla
+        location.href = wa;
+      }
     })();
   </script>
-
   <noscript>
-    <meta http-equiv="refresh" content="0;url=https://chat.whatsapp.com/BYvxfXtRCNSDujxkvgo78q">
+    <meta http-equiv="refresh" content="0;url=https://api.whatsapp.com/send?text=Hola">
   </noscript>
-
-  <style>
-    html,body{
-      height:100%;
-      margin:0;
-      background:#fff;
-    }
-  </style>
+  <style>html,body{height:100%;margin:0;background:#fff}</style>
 </head>
 <body></body>
 </html>
