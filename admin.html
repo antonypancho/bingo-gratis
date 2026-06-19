@@ -1,135 +1,173 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Panel Admin - Bingo</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Super Bingo Virtual — Dashboard</title>
 
   <style>
     body {
       margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #0f172a;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1a1030 0, #050010 55%, #020008 100%);
       color: #e2e8f0;
     }
 
-    header {
-      background: #1e293b;
-      padding: 20px;
-      font-size: 22px;
-      color: #38bdf8;
+    .page-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .banner {
+      background: linear-gradient(90deg, #7b2cbf, #4cc9f0);
+      color: #0a0014;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
       text-align: center;
-      font-weight: 600;
+      margin-bottom: 16px;
+      box-shadow: 0 0 18px rgba(76, 201, 240, 0.35);
     }
 
-    .top-buttons {
+    .filters {
       display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+      align-items: center;
     }
 
-    .container {
-      padding: 20px;
+    .select,
+    .input {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e2e8f0;
+      font-size: 13px;
+    }
+
+    .btn-crear,
+    .btn-eliminar,
+    .btn-extra {
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 14px;
+      box-shadow: 0 0 14px rgba(76, 201, 240, 0.45);
+    }
+
+    .btn-crear {
+      background: linear-gradient(90deg, #4cc9f0, #7b2cbf);
+      color: #0a0014;
+    }
+
+    .btn-eliminar {
+      background: linear-gradient(90deg,#ef4444,#b91c1c);
+      color: #fef2f2;
+    }
+
+    .btn-extra {
+      background: linear-gradient(90deg,#4cc9f0,#7b2cbf);
+      color: #0a0014;
+    }
+
+    .table-container {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      overflow: hidden;
+      box-shadow: 0 0 18px rgba(15, 23, 42, 0.7);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      background: #1e293b;
-      border-radius: 12px;
-      overflow: hidden;
+      font-size: 13px;
     }
 
-    th, td {
-      padding: 12px;
-      border-bottom: 1px solid #334155;
+    thead {
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    th,
+    td {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(30, 41, 59, 0.9);
       text-align: left;
-      font-size: 14px;
     }
 
     th {
-      background: #0f172a;
-      color: #38bdf8;
       font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #94a3b8;
     }
 
-    tr:hover {
-      background: #273449;
+    tr:nth-child(even) td {
+      background: rgba(15, 23, 42, 0.85);
+    }
+
+    .estado-pill {
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .estado-pendiente {
+      background: rgba(234, 179, 8, 0.15);
+      color: #facc15;
+      border: 1px solid rgba(234, 179, 8, 0.7);
+    }
+
+    .estado-aprobado {
+      background: rgba(22, 163, 74, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.7);
+    }
+
+    .estado-rechazado {
+      background: rgba(185, 28, 28, 0.15);
+      color: #fca5a5;
+      border: 1px solid rgba(248, 113, 113, 0.7);
     }
 
     .btn {
-      padding: 8px 12px;
+      padding: 5px 9px;
+      border-radius: 999px;
       border: none;
-      border-radius: 8px;
-      cursor: pointer;
+      font-size: 11px;
       font-weight: 600;
-      transition: 0.2s;
+      cursor: pointer;
+      margin-right: 4px;
     }
 
-    .btn-approve {
-      background: #22c55e;
-      color: #0f172a;
+    .btn-aceptar {
+      background: linear-gradient(90deg, #22c55e, #16a34a);
+      color: #022c22;
     }
 
-    .btn-approve:hover {
-      background: #16a34a;
+    .btn-rechazar {
+      background: linear-gradient(90deg, #ef4444, #b91c1c);
+      color: #fef2f2;
     }
 
-    .btn-reject {
-      background: #ef4444;
-      color: white;
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      opacity: 0.7;
     }
 
-    .btn-reject:hover {
-      background: #dc2626;
-    }
-
-    .btn-view {
-      background: #38bdf8;
-      color: #0f172a;
-    }
-
-    .btn-view:hover {
-      background: #0ea5e9;
-    }
-
-    .btn-clear {
-      background: #7f1d1d;
-      color: #fca5a5;
-    }
-
-    .btn-clear:hover {
-      background: #991b1b;
-    }
-
-    select {
-      background: #1e293b;
-      color: #e2e8f0;
-      padding: 8px;
-      border-radius: 8px;
-      border: 1px solid #334155;
-    }
-
-    /* Modal comprobante */
-    #modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85);
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-
-    #modal-img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    }
-
-    /* Modal lista jugadores */
-    #modalLista {
+    /* MODAL BASE */
+    .modal {
       display:none;
       position:fixed;
       top:0; left:0;
@@ -140,262 +178,1054 @@
       z-index:9999;
     }
 
-    #listaBox {
-      background:#1e293b;
-      padding:20px;
+    .modal-box {
+      background:#140028;
+      width:92%;
+      max-width:450px;
+      max-height:85vh;
+      overflow-y:auto;
+      padding:30px;
+      border-radius:18px;
+      text-align:center;
+      border:1px solid rgba(124,58,237,0.6);
+      box-shadow:0 0 35px rgba(124,58,237,0.45);
+      color:#E2E8F0;
+    }
+
+    .modal-input {
+      width:100%;
+      padding:14px;
+      margin-bottom:14px;
       border-radius:12px;
-      width:90%;
-      max-width:400px;
-      color:#e2e8f0;
+      border:1px solid rgba(76,201,240,0.5);
+      background:#0b0418;
+      color:white;
+      font-size:17px;
+    }
+
+    .modal-btn {
+      width:100%;
+      padding:14px;
+      background:linear-gradient(90deg,#4CC9F0,#7B2CBF);
+      border:none;
+      border-radius:12px;
+      font-weight:800;
+      cursor:pointer;
+      color:#0A0014;
+      box-shadow:0 0 18px rgba(76,201,240,0.45);
+      font-size:20px;
+      margin-bottom:12px;
+    }
+
+    .modal-cancel {
+      width:100%;
+      padding:12px;
+      background:#333;
+      border:none;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+      color:white;
       font-size:16px;
     }
 
-    #listaContenido {
-      white-space:pre-wrap;
-      font-size:15px;
+    /* GRID CARTONES */
+    .carton-grid {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:center;
+      margin-top:15px;
+      margin-bottom:20px;
+    }
+
+    .carton-btn {
+      padding:10px 14px;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.2s;
+      border:1px solid rgba(255,255,255,0.3);
+    }
+
+    .ocupado {
+      background:rgba(255,0,80,0.35);
+      color:#ffb3c6;
+      border-color:rgba(255,0,80,0.7);
+    }
+
+    .libre {
+      background:rgba(0,255,120,0.25);
+      color:#bbf7d0;
+      border-color:rgba(0,255,120,0.7);
+    }
+
+    /* TARJETAS HUÉRFANOS */
+    .huerfano-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      text-align: left;
+    }
+
+    .btn-eliminar-huerfano {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(90deg,#ef4444,#b91c1c);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
     }
   </style>
 </head>
 
 <body>
+  <div class="page-container">
+    <div class="banner">
+      🔐 Dashboard de administración — Super Bingo Virtual
+    </div>
 
-<header>🎛 Panel Admin — Control de Compras</header>
+    <div class="filters">
+      <button id="btnCrearBingo" class="btn-crear">➕ Crear bingo</button>
+      <button id="btnEliminarBingo" class="btn-eliminar">🗑 Eliminar bingo</button>
+      <button id="btnCopiarLista" class="btn-crear">📋 Copiar lista</button>
 
-<div class="container">
+      <button id="btnEditarCartones" class="btn-extra">🧩 Editar estado de cartones</button>
+      <button id="btnEditarTextos" class="btn-extra">📝 Editar encabezado y pie de lista</button>
+      <button id="btnEliminarRegistros" class="btn-extra">🧹 Eliminar registros manual</button>
 
-  <div class="top-buttons">
-    <button class="btn btn-clear" onclick="borrarTodo()">🗑 Borrar todo</button>
+      <select id="filtroBingo" class="select"></select>
 
-    <select id="filtroEstado" onchange="cargarCompras()">
-      <option value="todos">Todos</option>
-      <option value="pendiente">Pendiente</option>
-      <option value="aprobado">Aprobado</option>
-      <option value="rechazado">Rechazado</option>
-    </select>
+      <select id="filtroEstado" class="select">
+        <option value="">Todos los estados</option>
+        <option value="pendiente">Pendiente</option>
+        <option value="aprobado">Aprobado</option>
+        <option value="rechazado">Rechazado</option>
+      </select>
 
-    <button class="btn btn-view" onclick="listaJugadores()">📋 Lista de jugadores</button>
+      <input id="filtroTexto" class="input" type="text" placeholder="Buscar por nombre o teléfono..." />
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Bingo</th>
+            <th>Jugador</th>
+            <th>Teléfono</th>
+            <th>Cartones</th>
+            <th>Estado</th>
+            <th>Comprobante</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyCompras"></tbody>
+      </table>
+    </div>
+
+    <div class="footer">
+      © 2026 Superbingovirtual.online — desarrollado por Antony Magic
+    </div>
   </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Usuario</th>
-        <th>Teléfono</th>
-        <th>Cartones</th>
-        <th>Monto</th>
-        <th>Método</th>
-        <th>Comprobante</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody id="tablaCompras"></tbody>
-  </table>
-</div>
+  <!-- MODAL CREAR BINGO -->
+  <div id="modalCrearBingo" class="modal">
+    <div class="modal-box">
+      <h2 style="font-size:28px; font-weight:800; margin-bottom:20px; color:#4CC9F0;">
+        ➕ Crear nuevo bingo
+      </h2>
 
-<!-- MODAL COMPROBANTE -->
-<div id="modal">
-  <img id="modal-img" src="">
-</div>
+      <input id="nuevoNombre" class="modal-input" type="text" placeholder="Nombre del bingo">
+      <input id="nuevoCartones" class="modal-input" type="number" placeholder="Cantidad de cartones">
+      <input id="nuevoPrecio" class="modal-input" type="number" placeholder="Precio del cartón">
 
-<!-- MODAL LISTA DE JUGADORES -->
-<div id="modalLista">
-  <div id="listaBox">
-    <h2 style="margin-top:0; color:#38bdf8;">📋 Lista de jugadores</h2>
-    <pre id="listaContenido"></pre>
-
-    <button onclick="cerrarLista()" style="
-      margin-top:15px;
-      width:100%;
-      padding:10px;
-      background:#38bdf8;
-      border:none;
-      border-radius:8px;
-      font-weight:600;
-      cursor:pointer;
-      color:#0f172a;
-    ">Cerrar</button>
+      <button id="btnGuardarBingo" class="modal-btn">Guardar bingo</button>
+      <button onclick="cerrarModalCrearBingo()" class="modal-cancel">Cancelar</button>
+    </div>
   </div>
-</div>
 
+  <!-- MODAL ELIMINAR BINGO -->
+  <div id="modalEliminarBingo" class="modal">
+    <div class="modal-box" style="border-color:rgba(255,0,80,0.6); box-shadow:0 0 35px rgba(255,0,80,0.45);">
+      <h2 style="font-size:28px; font-weight:800; color:#ff4d6d;">
+        ⚠️ Eliminar bingo
+      </h2>
+
+      <p style="font-size:20px; margin-bottom:25px;">
+        ¿Seguro que deseas eliminar este bingo?<br>
+        <strong id="nombreBingoEliminar"></strong>
+      </p>
+
+      <button id="btnConfirmarEliminarBingo" class="modal-btn" style="background:linear-gradient(90deg,#ff4d6d,#b91c1c); color:white;">
+        Sí, eliminar
+      </button>
+
+      <button onclick="cerrarModalEliminarBingo()" class="modal-cancel">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- MODAL EDITAR COMPRA -->
+  <div id="modalEditarCompra" class="modal">
+    <div class="modal-box">
+      <h2 style="font-size:26px; font-weight:800; color:#4CC9F0;">
+        ✏️ Editar cartones
+      </h2>
+
+      <p id="editarNombre" style="font-size:18px; margin-bottom:10px;"></p>
+
+      <h3 style="color:#4CC9F0; margin-bottom:8px;">Pagados / Aprobados</h3>
+      <div id="zonaAprobados" class="carton-grid"></div>
+
+      <h3 style="color:#ff77e9; margin-bottom:8px;">Pendientes aún</h3>
+      <div id="zonaPendientes" class="carton-grid"></div>
+
+      <button id="btnGuardarEdicion" class="modal-btn">Guardar cambios</button>
+      <button onclick="cerrarEditarCompra()" class="modal-cancel">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- MODAL EDITAR ESTADO DE CARTONES -->
+  <div id="modalEditarEstado" class="modal">
+    <div class="modal-box">
+      <h2 style="font-size:26px; font-weight:800; color:#4CC9F0;">
+        🧩 Editar estado de cartones
+      </h2>
+
+      <input id="buscarCarton" class="modal-input" type="number" placeholder="Buscar número...">
+
+      <h3 style="margin-top:10px;">Cartones ocupados</h3>
+      <div id="gridCartones" class="carton-grid"></div>
+
+      <button id="btnGuardarEstadoCartones" class="modal-btn">Guardar cambios</button>
+      <button onclick="cerrarModalEditarEstado()" class="modal-cancel">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- MODAL EDITAR TEXTOS -->
+  <div id="modalEditarTextos" class="modal">
+    <div class="modal-box">
+      <h2 style="font-size:26px; font-weight:800; color:#4CC9F0;">
+        📝 Editar encabezado y pie de lista
+      </h2>
+
+      <textarea id="textoArriba" class="modal-input" placeholder="Texto arriba del listado" style="height:120px; resize:vertical;"></textarea>
+      <textarea id="textoAbajo" class="modal-input" placeholder="Texto abajo del listado" style="height:120px; resize:vertical;"></textarea>
+
+      <button id="btnGuardarTextos" class="modal-btn">Guardar textos</button>
+      <button onclick="cerrarModalEditarTextos()" class="modal-cancel">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- MODAL REGISTROS HUÉRFANOS -->
+  <div id="modalRegistrosHuerfanos" class="modal">
+    <div class="modal-box" style="max-width:600px;">
+      <h2 style="font-size:26px; font-weight:800; color:#4CC9F0;">
+        🧹 Registros huérfanos
+      </h2>
+
+      <p style="opacity:0.8; margin-bottom:15px;">
+        Estos registros quedaron sin bingo asociado. Puedes eliminarlos manualmente.
+      </p>
+
+      <div id="contenedorHuerfanos"></div>
+
+      <button id="btnEliminarTodosHuerfanos" class="modal-btn" style="margin-top:20px;">
+        🗑 Eliminar TODOS los registros huérfanos
+      </button>
+
+      <button onclick="cerrarModalRegistrosHuerfanos()" class="modal-cancel">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- MODAL VER COMPROBANTE -->
+  <div id="modalComprobante" class="modal">
+    <div class="modal-box" style="max-width:600px;">
+      <h2 style="font-size:26px; font-weight:800; color:#4CC9F0; margin-bottom:15px;">
+        📄 Comprobante de pago
+      </h2>
+
+      <img id="imgComprobante" src="" style="width:100%; border-radius:12px; margin-bottom:20px;">
+
+      <button id="btnAprobarComprobante" class="modal-btn" style="background:linear-gradient(90deg,#22c55e,#16a34a); color:white;">
+        Aceptar
+      </button>
+
+            <button id="btnRechazarComprobante" class="modal-btn" style="background:linear-gradient(90deg,#ef4444,#b91c1c); color:white;">
+        Rechazar
+      </button>
+
+      <button onclick="cerrarModalComprobante()" class="modal-cancel">Cerrar</button>
+    </div>
+  </div>
+  <!-- MODAL VER COMPROBANTE -->
+  <div id="modalComprobante" class="modal">
+    <div class="modal-box" style="max-width:600px;">
+      <h2 style="font-size:26px; font-weight:800; color:#4CC9F0; margin-bottom:15px;">
+        📄 Comprobante de pago
+      </h2>
+
+      <img id="imgComprobante" src="" style="width:100%; border-radius:12px; margin-bottom:20px;">
+
+      <button id="btnAprobarComprobante" class="modal-btn" style="background:linear-gradient(90deg,#22c55e,#16a34a); color:white;">
+        Aceptar
+      </button>
 <script type="module">
   import { db } from "./firebase.js";
   import {
     collection,
     getDocs,
-    doc,
     getDoc,
+    addDoc,
     updateDoc,
+    deleteDoc,
+    doc,
+    onSnapshot,
+    query,
+    where,
+    orderBy,
+    Timestamp,
     setDoc,
-    deleteDoc
+    writeBatch
   } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  const tabla = document.getElementById("tablaCompras");
+  const filtroBingo = document.getElementById("filtroBingo");
+  const filtroEstado = document.getElementById("filtroEstado");
+  const filtroTexto = document.getElementById("filtroTexto");
+  const tbodyCompras = document.getElementById("tbodyCompras");
 
-  async function cargarCompras() {
-    tabla.innerHTML = "";
+  const modalCrearBingo = document.getElementById("modalCrearBingo");
+  const btnCrearBingo = document.getElementById("btnCrearBingo");
+  const btnGuardarBingo = document.getElementById("btnGuardarBingo");
 
-    const filtro = document.getElementById("filtroEstado").value;
+  const btnEliminarBingo = document.getElementById("btnEliminarBingo");
+  const modalEliminarBingo = document.getElementById("modalEliminarBingo");
+  const btnConfirmarEliminarBingo = document.getElementById("btnConfirmarEliminarBingo");
+  const nombreBingoEliminar = document.getElementById("nombreBingoEliminar");
 
-    const querySnapshot = await getDocs(collection(db, "compras"));
+  const modalEditarCompra = document.getElementById("modalEditarCompra");
+  const editarNombre = document.getElementById("editarNombre");
 
-    querySnapshot.forEach((docu) => {
-      const data = docu.data();
+  const modalEditarEstado = document.getElementById("modalEditarEstado");
+  const btnEditarCartones = document.getElementById("btnEditarCartones");
+  const buscarCarton = document.getElementById("buscarCarton");
+  const gridCartones = document.getElementById("gridCartones");
+  const btnGuardarEstadoCartones = document.getElementById("btnGuardarEstadoCartones");
 
-      if (filtro !== "todos" && data.estado !== filtro) return;
+  const modalEditarTextos = document.getElementById("modalEditarTextos");
+  const btnEditarTextos = document.getElementById("btnEditarTextos");
+  const textoArriba = document.getElementById("textoArriba");
+  const textoAbajo = document.getElementById("textoAbajo");
+  const btnGuardarTextos = document.getElementById("btnGuardarTextos");
 
-      const fila = document.createElement("tr");
+  const btnEliminarRegistros = document.getElementById("btnEliminarRegistros");
+  const modalRegistrosHuerfanos = document.getElementById("modalRegistrosHuerfanos");
+  const contenedorHuerfanos = document.getElementById("contenedorHuerfanos");
+  const btnEliminarTodosHuerfanos = document.getElementById("btnEliminarTodosHuerfanos");
 
-      fila.innerHTML = `
-        <td>${data.usuario ?? "Sin nombre"}</td>
-        <td>${data.telefono ?? "N/A"}</td>
-        <td>${data.cartones.join(", ")}</td>
-        <td>$${data.monto}</td>
-        <td>${data.metodo}</td>
-        <td>
-          <button class="btn btn-view" onclick="verImagen('${data.comprobante}')">Ver</button>
-        </td>
-        <td>${data.estado}</td>
-        <td>
-          <button class="btn btn-approve" onclick="aprobar('${docu.id}')">Aprobar</button>
-          <button class="btn btn-reject" onclick="rechazar('${docu.id}')">Rechazar</button>
-        </td>
-      `;
+  const modalComprobante = document.getElementById("modalComprobante");
+  const imgComprobante = document.getElementById("imgComprobante");
+  const btnAprobarComprobante = document.getElementById("btnAprobarComprobante");
+  const btnRechazarComprobante = document.getElementById("btnRechazarComprobante");
 
-      tabla.appendChild(fila);
-    });
-  }
+  let compraActual = null;
+  let comprasRaw = [];
+  let mapaBingos = {};
+  let bingoSeleccionadoParaEliminar = null;
+  let compraSeleccionada = null;
 
-  window.cargarCompras = cargarCompras;
-
-  window.verImagen = function(url) {
-    const modal = document.getElementById("modal");
-    const img = document.getElementById("modal-img");
-
-    img.src = url;
-    modal.style.display = "flex";
-
-    modal.onclick = () => {
-      modal.style.display = "none";
-    };
+  /* ============================
+        CREAR BINGO
+  ============================ */
+  btnCrearBingo.onclick = () => {
+    modalCrearBingo.style.display = "flex";
   };
 
-  window.aprobar = async function(id) {
-    await updateDoc(doc(db, "compras", id), {
-      estado: "aprobado"
-    });
+  window.cerrarModalCrearBingo = function () {
+    modalCrearBingo.style.display = "none";
+  };
 
-    const compraRef = doc(db, "compras", id);
-    const compraSnap = await getDoc(compraRef);
-    const compra = compraSnap.data();
+  btnGuardarBingo.onclick = async () => {
+    const nombre = document.getElementById("nuevoNombre").value.trim();
+    const cartones = Number(document.getElementById("nuevoCartones").value);
+    const precio = Number(document.getElementById("nuevoPrecio").value);
 
-    for (let num of compra.cartones) {
-      await setDoc(doc(db, "cartones", num.toString()), {
-        estado: "vendido"
-      });
+    if (!nombre || !cartones || !precio) {
+      alert("Todos los campos son obligatorios.");
+      return;
     }
 
-    alert("Compra aprobada y cartones vendidos.");
-    cargarCompras();
-  };
-
-  window.rechazar = async function(id) {
-    await updateDoc(doc(db, "compras", id), {
-      estado: "rechazado"
+    const ref = await addDoc(collection(db, "bingos"), {
+      descripcion: nombre,
+      totalCartones: cartones,
+      precioCarton: precio,
+      fechaCreacion: Timestamp.now()
     });
 
-    const compraRef = doc(db, "compras", id);
-    const compraSnap = await getDoc(compraRef);
-    const compra = compraSnap.data();
+    const idBingo = ref.id;
 
-    for (let num of compra.cartones) {
-      await setDoc(doc(db, "cartones", num.toString()), {
-        estado: "libre"
-      });
+    const estado = {};
+    for (let i = 1; i <= cartones; i++) {
+      estado[i] = "libre";
     }
 
-    alert("Compra rechazada y cartones liberados.");
-    cargarCompras();
+    await setDoc(doc(db, "bingos", idBingo, "estado", "cartones"), estado);
+
+    alert("Bingo creado exitosamente.");
+    modalCrearBingo.style.display = "none";
+
+    document.getElementById("nuevoNombre").value = "";
+    document.getElementById("nuevoCartones").value = "";
+    document.getElementById("nuevoPrecio").value = "";
+
+    await cargarBingos();
   };
 
-  window.borrarTodo = async function() {
-    if (!confirm("¿Seguro que deseas borrar TODOS los registros?")) return;
+  /* ============================
+        ELIMINAR BINGO (BATCH)
+  ============================ */
+  btnEliminarBingo.onclick = () => {
+    const id = filtroBingo.value;
 
-    const comprasSnap = await getDocs(collection(db, "compras"));
-    comprasSnap.forEach(async (d) => {
-      await deleteDoc(doc(db, "compras", d.id));
-    });
+    if (!id) {
+      alert("Selecciona un bingo para eliminar.");
+      return;
+    }
 
-    const cartSnap = await getDocs(collection(db, "cartones"));
-    cartSnap.forEach(async (d) => {
-      await deleteDoc(doc(db, "cartones", d.id));
-    });
-
-    alert("Todos los registros han sido eliminados.");
-    cargarCompras();
+    bingoSeleccionadoParaEliminar = id;
+    nombreBingoEliminar.textContent = mapaBingos[id] || "Bingo sin nombre";
+    modalEliminarBingo.style.display = "flex";
   };
 
-  // 🔥 LISTA DE JUGADORES: APROBADOS POR CARTÓN + PENDIENTES COMO ANTES
-  window.listaJugadores = async function() {
-    const snap = await getDocs(collection(db, "compras"));
+  window.cerrarModalEliminarBingo = function () {
+    modalEliminarBingo.style.display = "none";
+    bingoSeleccionadoParaEliminar = null;
+  };
 
-    let aprobadosPorCarton = [];
-    let pendientes = [];
+  btnConfirmarEliminarBingo.onclick = async () => {
+    if (!bingoSeleccionadoParaEliminar) return;
+
+    const id = bingoSeleccionadoParaEliminar;
+    const batch = writeBatch(db);
+
+    const refBingo = doc(db, "bingos", id);
+    batch.delete(refBingo);
+
+    const refEstado = doc(db, "bingos", id, "estado", "cartones");
+    batch.delete(refEstado);
+
+    const qCompras = query(
+      collection(db, "compras"),
+      where("idBingo", "==", id)
+    );
+    const snapCompras = await getDocs(qCompras);
+    snapCompras.forEach(d => {
+      batch.delete(doc(db, "compras", d.id));
+    });
+
+    await batch.commit();
+
+    alert("Bingo eliminado correctamente.");
+
+    modalEliminarBingo.style.display = "none";
+    bingoSeleccionadoParaEliminar = null;
+
+    await cargarBingos();
+    renderTabla();
+  };
+
+  /* ============================
+        CARGAR BINGOS
+  ============================ */
+  async function cargarBingos() {
+    const snap = await getDocs(collection(db, "bingos"));
+    filtroBingo.innerHTML = "";
+
+    const optAll = document.createElement("option");
+    optAll.value = "";
+    optAll.textContent = "Todos los bingos";
+    filtroBingo.appendChild(optAll);
+
+    mapaBingos = {};
 
     snap.forEach((d) => {
       const data = d.data();
+      mapaBingos[d.id] = data.descripcion || d.id;
 
-      if (data.estado === "aprobado") {
-        data.cartones.forEach((num) => {
-          aprobadosPorCarton.push({
-            numero: num,
-            nombre: data.usuario
-          });
-        });
+      const opt = document.createElement("option");
+      opt.value = d.id;
+      opt.textContent = data.descripcion || d.id;
+      filtroBingo.appendChild(opt);
+    });
+  }
+
+  /* ============================
+        EDITAR COMPRA
+  ============================ */
+  let aprobadosTemp = [];
+  let pendientesTemp = [];
+
+  window.abrirEditarCompra = function (compra) {
+    compraActual = compra;
+
+    editarNombre.textContent = compra.usuario || "";
+
+    const cartones = compra.cartones || [];
+
+    aprobadosTemp = [...cartones];
+    pendientesTemp = [];
+
+    renderCartonesEdicion();
+
+    modalEditarCompra.style.display = "flex";
+  };
+
+  function renderCartonesEdicion() {
+    const zonaA = document.getElementById("zonaAprobados");
+    const zonaP = document.getElementById("zonaPendientes");
+
+    zonaA.innerHTML = "";
+    zonaP.innerHTML = "";
+
+    aprobadosTemp.forEach(num => {
+      const btn = document.createElement("button");
+      btn.className = "carton-btn";
+      btn.textContent = num;
+      btn.onclick = () => moverAPendientes(num);
+      zonaA.appendChild(btn);
+    });
+
+    pendientesTemp.forEach(num => {
+      const btn = document.createElement("button");
+      btn.className = "carton-btn";
+      btn.style.opacity = "0.6";
+      btn.textContent = num;
+      btn.onclick = () => moverAAprobados(num);
+      zonaP.appendChild(btn);
+    });
+  }
+
+  function moverAPendientes(num) {
+    aprobadosTemp = aprobadosTemp.filter(n => n !== num);
+    pendientesTemp.push(num);
+    renderCartonesEdicion();
+  }
+
+  function moverAAprobados(num) {
+    pendientesTemp = pendientesTemp.filter(n => n !== num);
+    aprobadosTemp.push(num);
+    renderCartonesEdicion();
+  }
+
+  window.cerrarEditarCompra = function () {
+    modalEditarCompra.style.display = "none";
+    compraActual = null;
+  };
+
+  document.getElementById("btnGuardarEdicion").onclick = async () => {
+    if (!compraActual) return;
+
+    const refOriginal = doc(db, "compras", compraActual.id);
+
+    const base = {
+      idBingo: compraActual.idBingo,
+      usuario: compraActual.usuario || "",
+      telefono: compraActual.telefono || "",
+      referencia: compraActual.referencia || "",
+      fecha: compraActual.fecha || Timestamp.now()
+    };
+
+    if (aprobadosTemp.length > 0) {
+      await updateDoc(refOriginal, {
+        ...base,
+        cartones: aprobadosTemp,
+        estado: "aprobado"
+      });
+    } else {
+      await updateDoc(refOriginal, {
+        cartones: [],
+        estado: "rechazado"
+      });
+    }
+
+    if (pendientesTemp.length > 0) {
+      await addDoc(collection(db, "compras"), {
+        ...base,
+        cartones: pendientesTemp,
+        estado: "pendiente",
+        fecha: Timestamp.now()
+      });
+    }
+
+    alert("Compra dividida en aprobados y pendientes correctamente.");
+    cerrarEditarCompra();
+  };
+
+  /* ============================
+        VER COMPROBANTE
+  ============================ */
+  window.abrirModalComprobante = async function (compra) {
+    compraSeleccionada = compra;
+
+    const q = query(
+      collection(db, "comprobantes"),
+      where("usuario", "==", compra.usuario),
+      where("telefono", "==", compra.telefono)
+    );
+
+    const snap = await getDocs(q);
+
+    if (snap.empty) {
+      alert("Este usuario no ha subido comprobante.");
+      return;
+    }
+
+    const data = snap.docs[0].data();
+    imgComprobante.src = data.url;
+
+    modalComprobante.style.display = "flex";
+  };
+
+  window.cerrarModalComprobante = function () {
+    modalComprobante.style.display = "none";
+    compraSeleccionada = null;
+  };
+
+  btnAprobarComprobante.onclick = async () => {
+    if (!compraSeleccionada) return;
+
+    await updateDoc(doc(db, "compras", compraSeleccionada.id), {
+      estado: "aprobado"
+    });
+
+    alert("Compra aprobada.");
+    cerrarModalComprobante();
+  };
+
+  btnRechazarComprobante.onclick = async () => {
+    if (!compraSeleccionada) return;
+
+    await updateDoc(doc(db, "compras", compraSeleccionada.id), {
+      estado: "rechazado",
+      cartones: []
+    });
+
+    alert("Compra rechazada.");
+    cerrarModalComprobante();
+  };
+
+  /* ============================
+        RENDER TABLA
+  ============================ */
+  function renderTabla() {
+    const estadoFiltro = filtroEstado.value;
+    const bingoFiltro = filtroBingo.value;
+    const texto = filtroTexto.value.toLowerCase();
+
+    tbodyCompras.innerHTML = "";
+
+    comprasRaw
+      .filter((c) => {
+        if (bingoFiltro && c.idBingo !== bingoFiltro) return false;
+        if (estadoFiltro && c.estado !== estadoFiltro) return false;
+
+        if (texto) {
+          const tNombre = (c.usuario || "").toLowerCase();
+          const tTel = (c.telefono || "").toLowerCase();
+          if (!tNombre.includes(texto) && !tTel.includes(texto)) return false;
+        }
+
+        return true;
+      })
+      .forEach((c) => {
+        const tr = document.createElement("tr");
+
+        const tdBingo = document.createElement("td");
+        tdBingo.textContent = mapaBingos[c.idBingo] || c.idBingo || "-";
+
+        const tdJugador = document.createElement("td");
+        tdJugador.innerHTML = `<strong>${c.usuario || "-"}</strong>`;
+
+        const tdTel = document.createElement("td");
+        tdTel.textContent = c.telefono || "-";
+
+        const tdCartones = document.createElement("td");
+        tdCartones.innerHTML = `<span class="tag">${(c.cartones || []).join(", ")}</span>`;
+
+        const tdEstado = document.createElement("td");
+        const spanEstado = document.createElement("span");
+        spanEstado.classList.add("estado-pill");
+        if (c.estado === "pendiente") spanEstado.classList.add("estado-pendiente");
+        if (c.estado === "aprobado") spanEstado.classList.add("estado-aprobado");
+        if (c.estado === "rechazado") spanEstado.classList.add("estado-rechazado");
+        spanEstado.textContent = c.estado || "-";
+        tdEstado.appendChild(spanEstado);
+
+        const tdComprobante = document.createElement("td");
+        const btnVer = document.createElement("button");
+        btnVer.textContent = "Ver";
+        btnVer.classList.add("btn");
+        btnVer.style.background = "linear-gradient(90deg,#4cc9f0,#7b2cbf)";
+        btnVer.style.color = "#0a0014";
+        btnVer.onclick = () => abrirModalComprobante(c);
+        tdComprobante.appendChild(btnVer);
+
+        const tdAcciones = document.createElement("td");
+
+        const btnA = document.createElement("button");
+        btnA.textContent = "Aceptar";
+        btnA.classList.add("btn", "btn-aceptar");
+        btnA.onclick = () => cambiarEstado(c.id, "aprobado");
+
+        const btnR = document.createElement("button");
+        btnR.textContent = "Rechazar";
+        btnR.classList.add("btn", "btn-rechazar");
+        btnR.onclick = () => cambiarEstado(c.id, "rechazado");
+
+        const btnE = document.createElement("button");
+        btnE.textContent = "Editar";
+        btnE.classList.add("btn");
+        btnE.style.background = "linear-gradient(90deg,#4cc9f0,#7b2cbf)";
+        btnE.style.color = "#0a0014";
+        btnE.onclick = () => abrirEditarCompra(c);
+
+        tdAcciones.appendChild(btnA);
+        tdAcciones.appendChild(btnR);
+        tdAcciones.appendChild(btnE);
+
+        tr.appendChild(tdBingo);
+        tr.appendChild(tdJugador);
+        tr.appendChild(tdTel);
+        tr.appendChild(tdCartones);
+        tr.appendChild(tdEstado);
+        tr.appendChild(tdComprobante);
+        tr.appendChild(tdAcciones);
+
+        tbodyCompras.appendChild(tr);
+      });
+  }
+  /* ============================
+        CAMBIAR ESTADO
+  ============================ */
+  async function cambiarEstado(idCompra, nuevoEstado) {
+    const ref = doc(db, "compras", idCompra);
+    const snap = await getDoc(ref);
+    const compra = { id: snap.id, ...snap.data() };
+
+    if (nuevoEstado === "rechazado") {
+      const refEstado = doc(db, "bingos", compra.idBingo, "estado", "cartones");
+      const snapEstado = await getDoc(refEstado);
+
+      if (snapEstado.exists()) {
+        const estado = snapEstado.data();
+
+        for (const num of compra.cartones || []) {
+          if (estado[num] !== undefined) {
+            await updateDoc(refEstado, {
+              [num]: "libre"
+            });
+          }
+        }
       }
 
-      if (data.estado === "pendiente") {
-        pendientes.push({
-          nombre: data.usuario,
-          cartones: data.cartones
+      await updateDoc(ref, {
+        estado: "rechazado",
+        cartones: []
+      });
+
+      alert("Compra rechazada y cartones liberados.");
+      return;
+    }
+
+    await updateDoc(ref, { estado: nuevoEstado });
+    alert(`Compra actualizada a: ${nuevoEstado.toUpperCase()}`);
+  }
+
+  /* ============================
+        ESCUCHAR COMPRAS
+  ============================ */
+  function escucharCompras() {
+    const q = query(collection(db, "compras"), orderBy("fecha", "desc"));
+    onSnapshot(q, (snap) => {
+      comprasRaw = [];
+      snap.forEach((d) => {
+        comprasRaw.push({ id: d.id, ...d.data() });
+      });
+      renderTabla();
+    });
+  }
+
+  /* ============================
+        FILTROS
+  ============================ */
+  filtroBingo.addEventListener("change", renderTabla);
+  filtroEstado.addEventListener("change", renderTabla);
+  filtroTexto.addEventListener("input", renderTabla);
+
+  /* ============================
+        COPIAR LISTA
+  ============================ */
+  document.getElementById("btnCopiarLista").onclick = () => {
+    let lista = [];
+
+    comprasRaw.forEach(c => {
+      (c.cartones || []).forEach(num => {
+        lista.push({
+          numero: num,
+          nombre: c.usuario,
+          estado: c.estado
         });
+      });
+    });
+
+    lista.sort((a, b) => a.numero - b.numero);
+
+    const numEmoji = n => {
+      const mapa = {
+        "0": "0️⃣",
+        "1": "1️⃣",
+        "2": "2️⃣",
+        "3": "3️⃣",
+        "4": "4️⃣",
+        "5": "5️⃣",
+        "6": "6️⃣",
+        "7": "7️⃣",
+        "8": "8️⃣",
+        "9": "9️⃣"
+      };
+
+      return String(n)
+        .split("")
+        .map(d => mapa[d] || d)
+        .join("");
+    };
+
+    let cuerpo = "";
+
+    lista.forEach(item => {
+      const icono = item.estado === "aprobado" ? "☑️" : "🕑";
+      cuerpo += `${numEmoji(item.numero)}-${icono} ${item.nombre}\n`;
+    });
+
+    const arriba = localStorage.getItem("textoArribaListado") || "";
+    const abajo = localStorage.getItem("textoAbajoListado") || "";
+
+    let textoFinal = "";
+
+    if (arriba.trim()) {
+      textoFinal += arriba + "\n\n";
+    }
+
+    textoFinal += cuerpo;
+
+    if (abajo.trim()) {
+      textoFinal += "\n\n" + abajo;
+    }
+
+    navigator.clipboard.writeText(textoFinal);
+    alert("Lista copiada");
+  };
+
+  /* ============================
+        EDITAR ESTADO DE CARTONES
+  ============================ */
+  let estadoCartonesActual = {};
+  let idBingoEstadoActual = null;
+
+  btnEditarCartones.onclick = async () => {
+    const id = filtroBingo.value;
+    if (!id) {
+      alert("Selecciona un bingo para editar sus cartones.");
+      return;
+    }
+
+    idBingoEstadoActual = id;
+
+    const refEstado = doc(db, "bingos", id, "estado", "cartones");
+    const snapEstado = await getDoc(refEstado);
+
+    if (!snapEstado.exists()) {
+      alert("Este bingo no tiene estado de cartones configurado.");
+      return;
+    }
+
+    estadoCartonesActual = snapEstado.data();
+
+    buscarCarton.value = "";
+    renderGridCartones();
+    modalEditarEstado.style.display = "flex";
+  };
+
+  function renderGridCartones() {
+    gridCartones.innerHTML = "";
+
+    const filtro = buscarCarton.value ? Number(buscarCarton.value) : null;
+
+    const ocupados = Object.keys(estadoCartonesActual)
+      .map(n => Number(n))
+      .filter(n => estadoCartonesActual[n] === "ocupado");
+
+    ocupados
+      .filter(n => (filtro ? n === filtro : true))
+      .forEach(n => {
+        const btn = document.createElement("button");
+        btn.className = "carton-btn ocupado";
+        btn.textContent = n;
+        btn.onclick = () => {
+          estadoCartonesActual[n] = "libre";
+          btn.className = "carton-btn libre";
+        };
+        gridCartones.appendChild(btn);
+      });
+
+    if (gridCartones.innerHTML === "") {
+      const p = document.createElement("p");
+      p.textContent = "No hay cartones ocupados con ese filtro.";
+      gridCartones.appendChild(p);
+    }
+  }
+
+  buscarCarton.addEventListener("input", renderGridCartones);
+
+  btnGuardarEstadoCartones.onclick = async () => {
+    if (!idBingoEstadoActual) return;
+
+    const refEstado = doc(db, "bingos", idBingoEstadoActual, "estado", "cartones");
+    await setDoc(refEstado, estadoCartonesActual, { merge: false });
+
+    alert("Estado de cartones actualizado.");
+    cerrarModalEditarEstado();
+  };
+
+  window.cerrarModalEditarEstado = function () {
+    modalEditarEstado.style.display = "none";
+    idBingoEstadoActual = null;
+    estadoCartonesActual = {};
+    gridCartones.innerHTML = "";
+    buscarCarton.value = "";
+  };
+
+  /* ============================
+        EDITAR TEXTOS (LOCALSTORAGE)
+  ============================ */
+  btnEditarTextos.onclick = () => {
+    textoArriba.value = localStorage.getItem("textoArribaListado") || "";
+    textoAbajo.value = localStorage.getItem("textoAbajoListado") || "";
+    modalEditarTextos.style.display = "flex";
+  };
+
+  btnGuardarTextos.onclick = () => {
+    localStorage.setItem("textoArribaListado", textoArriba.value || "");
+    localStorage.setItem("textoAbajoListado", textoAbajo.value || "");
+    alert("Textos guardados.");
+    cerrarModalEditarTextos();
+  };
+
+  window.cerrarModalEditarTextos = function () {
+    modalEditarTextos.style.display = "none";
+  };
+
+  /* ============================
+        ELIMINAR REGISTROS MANUAL
+  ============================ */
+  btnEliminarRegistros.onclick = async () => {
+    await cargarRegistrosHuerfanos();
+    modalRegistrosHuerfanos.style.display = "flex";
+  };
+
+  window.cerrarModalRegistrosHuerfanos = function () {
+    modalRegistrosHuerfanos.style.display = "none";
+  };
+
+  async function cargarRegistrosHuerfanos() {
+    contenedorHuerfanos.innerHTML = "Cargando...";
+
+    const snapBingos = await getDocs(collection(db, "bingos"));
+    const bingosExistentes = {};
+    snapBingos.forEach(b => bingosExistentes[b.id] = true);
+
+    const snapCompras = await getDocs(collection(db, "compras"));
+
+    const huerfanos = [];
+    snapCompras.forEach(c => {
+      const data = c.data();
+      const idBingo = data.idBingo;
+
+      if (!idBingo || !bingosExistentes[idBingo]) {
+        huerfanos.push({ id: c.id, ...data });
       }
     });
 
-    // Ordenar aprobados por número de cartón
-    aprobadosPorCarton.sort((a, b) => a.numero - b.numero);
+    renderRegistrosHuerfanos(huerfanos);
+  }
 
-    let texto = "";
+  function renderRegistrosHuerfanos(lista) {
+    contenedorHuerfanos.innerHTML = "";
 
-    // ✔ APROBADOS POR CARTÓN
-    texto += "✔ Personas aprobadas:\n\n";
-    if (aprobadosPorCarton.length === 0) {
-      texto += "  Ninguna\n";
-    } else {
-      aprobadosPorCarton.forEach((item) => {
-        texto += `${item.numero} ${item.nombre}\n`;
-      });
+    if (lista.length === 0) {
+      contenedorHuerfanos.innerHTML = "<p>No hay registros huérfanos.</p>";
+      return;
     }
 
-    // ⏳ PENDIENTES (igual que antes)
-    texto += "\n⏳ Personas pendientes:\n\n";
-    if (pendientes.length === 0) {
-      texto += "  Ninguna\n";
-    } else {
-      pendientes.forEach((p, i) => {
-        texto += `${i + 1}. ${p.nombre} — Cartones: ${p.cartones.join(", ")}\n`;
-      });
-    }
+    lista.forEach(r => {
+      const div = document.createElement("div");
+      div.className = "huerfano-card";
 
-    document.getElementById("listaContenido").innerText = texto;
-    document.getElementById("modalLista").style.display = "flex";
+      div.innerHTML = `
+        <strong>${r.usuario || "Sin nombre"}</strong><br>
+        Tel: ${r.telefono || "-"}<br>
+        Cartones: ${(r.cartones || []).join(", ")}<br>
+        idBingo: ${r.idBingo || "(vacío)"}<br>
+        Fecha: ${r.fecha ? (r.fecha.toDate ? (r.fecha.toDate().toLocaleString()) : "-") : "-"}<br>
+        <button class="btn-eliminar-huerfano" onclick="eliminarRegistroManual('${r.id}')">
+          Eliminar
+        </button>
+      `;
+
+      contenedorHuerfanos.appendChild(div);
+    });
+  }
+
+  window.eliminarRegistroManual = async function (id) {
+    await deleteDoc(doc(db, "compras", id));
+    await cargarRegistrosHuerfanos();
+    alert("Registro eliminado.");
   };
 
-  window.cerrarLista = function() {
-    document.getElementById("modalLista").style.display = "none";
+  btnEliminarTodosHuerfanos.onclick = async () => {
+    const snapCompras = await getDocs(collection(db, "compras"));
+    const snapBingos = await getDocs(collection(db, "bingos"));
+
+    const bingosExistentes = {};
+    snapBingos.forEach(b => bingosExistentes[b.id] = true);
+
+    const batch = writeBatch(db);
+
+    snapCompras.forEach(c => {
+      const data = c.data();
+      const idBingo = data.idBingo;
+
+      if (!idBingo || !bingosExistentes[idBingo]) {
+        batch.delete(doc(db, "compras", c.id));
+      }
+    });
+
+    await batch.commit();
+    await cargarRegistrosHuerfanos();
+
+    alert("Todos los registros huérfanos fueron eliminados.");
   };
 
-  cargarCompras();
+  /* ============================
+        INICIO
+  ============================ */
+  (async function init() {
+    await cargarBingos();
+    escucharCompras();
+  })();
 </script>
 
 </body>

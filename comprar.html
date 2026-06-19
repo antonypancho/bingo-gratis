@@ -2,417 +2,683 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Comprar Cartones</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BINGO MAGIC GRATIS — Comprar cartones</title>
 
   <style>
     body {
       margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #0f172a;
+      font-family: system-ui, sans-serif;
+      background: radial-gradient(circle at top, #0a1a3a 0, #020617 55%, #000814 100%);
       color: #e2e8f0;
     }
 
-    header {
-      background: #1e293b;
-      padding: 20px;
-      font-size: 20px;
-      color: #38bdf8;
-      text-align: center;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+    .page-container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px;
     }
 
-    .container {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .top-panel {
-      background: #1e293b;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      line-height: 1.6;
-    }
-
-    .top-panel h2 {
-      margin-top: 0;
-      color: #38bdf8;
-    }
-
-    .info-box {
-      background: #0f172a;
-      border: 2px solid #38bdf8;
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
-    }
-
-    .info-box p {
-      font-size: 16px;
-      margin: 6px 0;
-    }
-
-    #comprobante {
-      padding: 14px;
-      background: #0ea5e9;
+    .banner {
+      background: linear-gradient(90deg, #1E40FF, #4CC9F0);
+      color: #0a0014;
+      padding: 10px 14px;
       border-radius: 10px;
-      border: 2px dashed #38bdf8;
-      cursor: pointer;
-      width: 100%;
-      color: #e2e8f0;
-      font-weight: 600;
-      margin-top: 10px;
-      transition: 0.25s ease;
-
-      
-    }
-
-    #comprobante:hover {
-      background: #38bdf8;
-      border-color: #0ea5e9;
-      transform: scale(1.03);
-    }
-
-    .comprobante-btn {
-      width: 100%;
-      padding: 14px 10px;
-      background: linear-gradient(90deg, #38bdf8, #0ea5e9);
-      color: #0f172a;
-      border: none;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 16px;
-      margin-top: 18px;
-      cursor: pointer;
-      transition: 0.25s ease;
-      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35);
-    }
-
-    .comprobante-btn:hover {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 6px 18px rgba(56, 189, 248, 0.45);
-    }
-
-    .cartones {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-      gap: 12px;
-    }
-
-    .cuadro {
-      background: #1e293b;
-      border: 2px solid #334155;
-      border-radius: 25px;
-      height: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       font-size: 14px;
       font-weight: 600;
-      color: #94a3b8;
-      cursor: pointer;
-      transition: 0.25s ease;
-      padding: 0 12px;
+      text-align: center;
+      margin-bottom: 16px;
+      box-shadow: 0 0 18px rgba(76, 201, 240, 0.35);
     }
 
-    .cuadro:hover {
-      border-color: #38bdf8;
-      color: #38bdf8;
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+    .card {
+      background: rgba(0, 20, 60, 0.55);
+      border-radius: 14px;
+      padding: 14px 14px 18px;
+      border: 1px solid rgba(30, 64, 255, 0.45);
+      box-shadow: 0 0 22px rgba(30, 64, 255, 0.25);
+      margin-bottom: 16px;
     }
 
-    .cuadro.seleccionado {
-      background: #14532d;
-      border-color: #22c55e;
-      color: #22c55e;
-      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
-      transform: translateY(-3px) scale(1.05);
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-shadow: 0 0 10px #4CC9F0;
     }
 
-    .cuadro.bloqueado {
-      background: #3f3f46;
-      border-color: #52525b;
-      color: #a1a1aa;
-      cursor: not-allowed;
-      opacity: 0.6;
-      transform: none;
-      box-shadow: none;
-    }
-
-    #modalError {
-      display:none;
-      position:fixed;
-      top:0; left:0;
-      width:100%; height:100%;
-      background:rgba(0,0,0,0.75);
-      justify-content:center;
-      align-items:center;
-      z-index:99999;
-    }
-
-    #modalErrorBox {
-      background:#7f1d1d;
-      padding:25px;
-      border-radius:15px;
-      width:90%;
-      max-width:380px;
-      color:#fca5a5;
+    .user-row {
       text-align:center;
-      box-shadow:0 0 25px rgba(0,0,0,0.5);
+      font-size:18px;
+      font-weight:600;
+      line-height:1.6;
+      margin-bottom:12px;
+    }
+
+    .pill {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 12px;
+      display: inline-block;
+      margin-top: 6px;
+    }
+
+    .select {
+      width: 100%;
+      margin-top: 8px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(76, 201, 240, 0.5);
+      background: #0b0418;
+      color: #e2e8f0;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .carton-btn {
+      border-radius: 10px;
+      padding: 10px 0;
+      font-size: 20px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .carton-disponible {
+      background: rgba(30, 64, 255, 0.18);
+      border: 2px solid rgba(76, 201, 240, 0.55);
+      color: #dbeafe;
+      border-radius: 12px;
+      transition: 0.2s ease;
+    }
+    .carton-disponible:hover {
+      background: rgba(30, 64, 255, 0.28);
+      box-shadow: 0 0 12px rgba(76, 201, 240, 0.45);
+      transform: translateY(-2px);
+    }
+
+    .carton-seleccionado {
+      background: rgba(76, 201, 240, 0.35);
+      border: 2px solid #4CC9F0;
+      color: #e0f7ff;
+      border-radius: 12px;
+      box-shadow:
+        0 0 12px rgba(76, 201, 240, 0.7),
+        0 0 20px rgba(76, 201, 240, 0.45);
+      transform: scale(1.05);
+    }
+
+    .carton-ocupado {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.15);
+      cursor: not-allowed;
+      text-decoration: line-through;
+      opacity: 0.35;
+      border-radius: 12px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      margin-bottom: 12px;
+      padding: 12px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(90deg, #4CC9F0, #1E40FF);
+      color: #0a0014;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 0 16px rgba(76, 201, 240, 0.4);
     }
   </style>
 </head>
 
 <body>
 
-<header style="background:#1e293b; padding:0; text-align:center;">
-  <img src="banner.png" alt="Bingo Magic Banner" style="width:100%; max-width:500px; margin:auto; display:block;">
-</header>
+<!-- MODAL SUBIENDO -->
+<div id="modalSubiendo" style="
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.85);
+  justify-content:center;
+  align-items:center;
+  z-index:99999;
+">
+  <div style="
+    background:#1e293b;
+    padding:25px;
+    border-radius:15px;
+    width:90%;
+    max-width:350px;
+    color:#e2e8f0;
+    text-align:center;
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
+  ">
+    <h3 style="margin-top:0; color:#38bdf8;">Subiendo comprobante…</h3>
 
-<div class="container">
-  <div class="top-panel">
-    <h2>🧙‍♂️ ¡BINGO MAGIC GRATIS! 🎰</h2>
-    <p>¡Es tu momento de ganar sin pagar nada! Solo sigue estos pasos y deja que la suerte te acompañe:</p>
-    <p>🎟️ <b>¿Cómo participar?</b><br>
-    Elige tu cartón: Selecciona el que más te guste en el panel de aquí abajo. 👇</p>
-    <p>Comparte la magia: Publica en tu Estado de WhatsApp la imagen que subimos diariamente al grupo.</p>
-    <p>¡Gana cartones gratis! Según el alcance de tu estado, ¡así de fácil!</p>
-    <p><b>📈 Premios por Visualizaciones:</b><br>
-    👀 30 Vistas ➔ 🎫 1 Cartón<br>
-    👀 50 Vistas ➔ 🎫🎫 2 Cartones<br>
-    👀 100 Vistas ➔ 🎫🎫🎫🎫🎫 5 Cartones<br>
-    👀 150 Vistas ➔ 🎫🎫🎫🎫🎫🎫🎫🎫 8 Cartones</p>
-    <p><b>⚠️ REGLA DE ORO:</b><br>
-    Para que tu participación sea válida, el estado debe permanecer activo durante las 24 horas. ¡No lo borres o quedarás descalificado! 🚫</p>
-    <hr style="opacity:0.3; margin:15px 0;">
-    <div class="info-box">
-      <p id="infoNombre"></p>
-      <p id="infoCartones"></p>
+    <div style="
+      width:100%;
+      height:10px;
+      background:#334155;
+      border-radius:10px;
+      overflow:hidden;
+      margin-top:15px;
+    ">
+      <div id="barraSubida" style="
+        width:0%;
+        height:100%;
+        background:#38bdf8;
+        animation: barraAnim 1.2s infinite;
+      "></div>
     </div>
-    <h3>🧾 Subir comprobante</h3>
-    <input type="file" id="comprobante" accept="image/*" />
-    <button class="comprobante-btn" onclick="enviar()">🛒 Enviar Compra</button>
-  </div>
-  <div class="cartones" id="cartonesContainer"></div>
-</div>
-
-<div id="modalConfirm" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); justify-content:center; align-items:center; z-index:99999;">
-  <div style="background:#1e293b; padding:25px; border-radius:15px; width:90%; max-width:380px; color:#e2e8f0; text-align:center; box-shadow:0 0 20px rgba(0,0,0,0.4); animation: zoomIn 0.25s ease;">
-    <h2 style="margin-top:0; color:#38bdf8; font-size:22px;">🎉 Bingo Magic Gratis 🎉</h2>
-    <p id="modalConfirmMensaje" style="font-size:16px; line-height:1.5;"></p>
-    <button onclick="cerrarModalConfirm()" style="margin-top:20px; width:100%; padding:12px; background:#38bdf8; border:none; border-radius:10px; font-weight:600; cursor:pointer; color:#0f172a; font-size:15px;">Continuar</button>
   </div>
 </div>
 
 <style>
-@keyframes zoomIn {
-  from { transform: scale(0.7); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+@keyframes barraAnim {
+  0% { width:0%; }
+  50% { width:100%; }
+  100% { width:0%; }
 }
 </style>
 
-<div id="modalError">
-  <div id="modalErrorBox">
-    <h2 style="margin-top:0; color:#fecaca;">❗ ALERTA ❗</h2>
-    <p id="modalErrorMensaje" style="font-size:16px; line-height:1.5;"></p>
-    <button onclick="cerrarModalError()" style="margin-top:20px; width:100%; padding:12px; background:#f87171; border:none; border-radius:10px; font-weight:600; cursor:pointer; color:#7f1d1d; font-size:15px;">Cambiar Cartón</button>
+<!-- MODAL CONFIRMACIÓN -->
+<div id="modalConfirmacion" style="
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.85);
+  justify-content:center;
+  align-items:center;
+  z-index:99999;
+">
+  <div style="
+    background:#1e293b;
+    padding:25px;
+    border-radius:15px;
+    width:90%;
+    max-width:350px;
+    color:#e2e8f0;
+    text-align:center;
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
+  ">
+    <h2 style="margin-top:0; color:#38bdf8;">🎉 Compra realizada 🎉</h2>
+
+    <p id="modalNombre" style="font-size:16px; margin-bottom:10px;"></p>
+    <p id="modalCartones" style="font-size:16px;"></p>
+
+    <button onclick="cerrarModalConfirmacion()" style="
+      margin-top:20px;
+      width:100%;
+      padding:12px;
+      background:#38bdf8;
+      border:none;
+      border-radius:10px;
+      font-weight:600;
+      cursor:pointer;
+      color:#0f172a;
+      font-size:15px;
+    ">
+      Continuar
+    </button>
   </div>
 </div>
 
+<div class="page-container">
+
+  <div class="banner">
+    👀 BINGO MAGIC GRATIS — Selección de cartones
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="font-size:20px; text-align:center;">
+      🧙‍♂️ INFORMACIÓN DEL JUGADOR ✨
+    </div>
+
+    <div class="user-row">
+      <div>👤 <strong>Nombre:</strong> <span id="userNombre">—</span></div>
+      <div>📱 <strong>WhatsApp:</strong> <span id="userTelefono">—</span></div>
+    </div>
+
+    <div style="
+      margin-top:18px;
+      font-size:15px;
+      text-align:center;
+      font-weight:600;
+      color:#4CC9F0;
+      text-shadow:0 0 8px #4CC9F0;
+    ">
+
+    POR CADA 30 VISTAS 👀 PODRAS SELECCIONAR UN CARTON
+    <br>
+    <br>
+      🎟️ SELECCIONA LOS CARTONES QUE DESEES APARTAR  
+      <br>👇👇👇👇👇👇👇
+
+    </div>
+    
+
+    <select id="selectBingo" class="select" style="margin-top:15px;" disabled></select>
+
+    <div class="pill">Cartones totales: <span id="totalCartones">100</span></div>
+    <div class="pill">Ocupados: <span id="ocupadosCount">0</span></div>
+
+    <div id="montoPagar" style="
+      margin-top:10px;
+      font-size:17px;
+      font-weight:700;
+      color:#4CC9F0;
+      text-shadow:0 0 10px #4CC9F0;
+      text-align:center;
+    ">
+      👀DEBES TENER MINIMO: 0 VISTAS  
+      <br>
+      🧮 Cartones seleccionados: 0
+    </div>
+  </div>
+
+  <!-- SUBIR COMPROBANTE -->
+  <button id="btnSubirComprobante" class="btn-primary" style="margin-top:10px;">
+    📤 Subir comprobante
+  </button>
+
+  <input type="file" id="inputComprobante" accept="image/*" style="display:none;">
+
+  <!-- CONFIRMAR COMPRA -->
+  <button id="btnConfirmar" class="btn-primary">
+    Confirmar compra
+  </button>
+
+  <div class="card">
+    <div class="card-title">Cartones disponibles</div>
+    <div id="gridCartones" class="grid"></div>
+  </div>
+
+<!-- ============================
+      SCRIPT ÚNICO
+============================ -->
 <script type="module">
-  import { db } from "./firebase.js";
-  import { 
-    collection, Timestamp, getDocs, doc, query, where, runTransaction, addDoc
-  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { db } from "./firebase.js";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  query,
+  where,
+  Timestamp,
+  runTransaction,
+  doc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  const totalCartones = 150;
-  const contenedor = document.getElementById("cartonesContainer");
-  let seleccionados = [];
+const userNombreEl = document.getElementById("userNombre");
+const userTelefonoEl = document.getElementById("userTelefono");
+const selectBingo = document.getElementById("selectBingo");
+const gridCartones = document.getElementById("gridCartones");
+const totalCartonesEl = document.getElementById("totalCartones");
+const ocupadosCountEl = document.getElementById("ocupadosCount");
+const btnConfirmar = document.getElementById("btnConfirmar");
+const montoPagarEl = document.getElementById("montoPagar");
 
-  const nombreUsuario = localStorage.getItem("nombre");
-  const telefonoUsuario = localStorage.getItem("telefono");
+let precioCarton = 0;
+let cartonesOcupados = new Set();
+let cartonesSeleccionados = new Set();
+let bingoActual = null;
 
-  if (!nombreUsuario || !telefonoUsuario) {
-    alert("Debes iniciar sesión primero.");
-    window.location.href = "index.html";
+/* ============================
+      CARGAR DATOS DEL USUARIO
+============================ */
+function cargarUsuario() {
+  userNombreEl.textContent = localStorage.getItem("nombre") || "—";
+  userTelefonoEl.textContent = localStorage.getItem("telefono") || "—";
+}
+
+/* ============================
+      CARGAR BINGOS
+============================ */
+async function cargarBingos() {
+  const snap = await getDocs(collection(db, "bingos"));
+  selectBingo.innerHTML = "";
+
+  if (snap.empty) {
+    selectBingo.innerHTML = "<option>No hay bingos disponibles</option>";
+    gridCartones.innerHTML = "<p style='text-align:center;'>No hay cartones para mostrar</p>";
+    btnConfirmar.disabled = true;
+    return;
   }
 
-  document.getElementById("infoNombre").innerHTML = `👤 <b>Nombre:</b> ${nombreUsuario}`;
-  document.getElementById("infoCartones").innerHTML = `🎟️ <b>Cartones:</b> Ninguno seleccionado`;
+  const primerBingo = snap.docs[0];
+  const data = primerBingo.data();
 
-  let cartonesBloqueados = [];
-  let envioEnProgreso = false;
+  bingoActual = primerBingo.id;
+  precioCarton = data.precioCarton || 0;
 
-  window.mostrarModalError = function(cartones) {
-    const modal = document.getElementById("modalError");
-    const mensaje = document.getElementById("modalErrorMensaje");
-    mensaje.innerHTML = `Cartón(es) no disponibles: <b>${cartones.join(", ")}</b><br><br>Cámbialo para continuar la transacción.`;
-    modal.style.display = "flex";
-  };
+  selectBingo.innerHTML = `<option>${data.descripcion}</option>`;
+  totalCartonesEl.textContent = data.totalCartones || 100;
 
-  window.cerrarModalError = function() {
-    document.getElementById("modalError").style.display = "none";
-  };
+  await cargarOcupados(bingoActual);
+  renderGrid();
+  actualizarMonto();
+}
 
-  async function verificarCompraCreada(nombre, cartones) {
-    const q = query(collection(db, "compras"), where("usuario", "==", nombre), where("cartones", "array-contains-any", cartones));
-    const snap = await getDocs(q);
-    return !snap.empty;
-  }
+/* ============================
+      RENDERIZAR GRID
+============================ */
+function renderGrid() {
+  gridCartones.innerHTML = "";
 
-  async function cargarBloqueados() {
-    const snap = await getDocs(collection(db, "cartones"));
-    cartonesBloqueados = [];
-    snap.forEach(docu => {
-      const estado = docu.data().estado;
-      if (estado === "reservado" || estado === "vendido") {
-        cartonesBloqueados.push(parseInt(docu.id));
-      }
-    });
-  }
+  const total = Number(totalCartonesEl.textContent) || 100;
 
-  await cargarBloqueados();
+  for (let i = 1; i <= total; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = i;
+    btn.classList.add("carton-btn");
 
-  function renderizarCartones() {
-    contenedor.innerHTML = "";
-    for (let i = 1; i <= totalCartones; i++) {
-      const bloqueado = cartonesBloqueados.includes(i);
-      contenedor.innerHTML += `
-        <div class="cuadro ${bloqueado ? "bloqueado" : ""}" id="cuadro-${i}" ${bloqueado ? "" : `onclick="seleccionar(${i})"`}>
-          ${i}
-        </div>
-      `;
-    }
-    seleccionados.forEach(num => {
-      const cuadro = document.getElementById(`cuadro-${num}`);
-      if (cuadro && !cuadro.classList.contains("bloqueado")) {
-        cuadro.classList.add("seleccionado");
-      }
-    });
-  }
+    if (cartonesOcupados.has(i)) {
+      btn.classList.add("carton-ocupado");
+      btn.disabled = false;
+      btn.onclick = () => mostrarModalNoDisponible(i);
 
-  renderizarCartones();
+    } else if (cartonesSeleccionados.has(i)) {
+      btn.classList.add("carton-seleccionado");
+      btn.onclick = () => toggleSeleccion(i);
 
-  window.seleccionar = function(num) {
-    const cuadro = document.getElementById(`cuadro-${num}`);
-    if (!seleccionados.includes(num)) {
-      seleccionados.push(num);
-      cuadro.classList.add("seleccionado");
     } else {
-      seleccionados = seleccionados.filter(n => n !== num);
-      cuadro.classList.remove("seleccionado");
+      btn.classList.add("carton-disponible");
+      btn.onclick = () => toggleSeleccion(i);
     }
-    document.getElementById("infoCartones").innerHTML = `🎟️ <b>Cartones:</b> ${seleccionados.length > 0 ? seleccionados.join(", ") : "Ninguno seleccionado"}`;
+
+    gridCartones.appendChild(btn);
   }
 
-  async function subirACloudinary(archivo) {
-    const url = "https://api.cloudinary.com/v1_1/dtmepdpgo/image/upload";
-    const formData = new FormData();
-    formData.append("file", archivo);
-    formData.append("upload_preset", "bingo_uploads");
-    const respuesta = await fetch(url, { method: "POST", body: formData });
-    const data = await respuesta.json();
-    return data.secure_url;
+  ocupadosCountEl.textContent = cartonesOcupados.size;
+}
+
+/* ============================
+      SELECCIONAR CARTONES
+============================ */
+function toggleSeleccion(num) {
+  if (cartonesOcupados.has(num)) {
+    mostrarModalNoDisponible(num);
+    return;
   }
 
-  window.mostrarModalConfirm = function(nombre, cartones) {
-    const modal = document.getElementById("modalConfirm");
-    const mensaje = document.getElementById("modalConfirmMensaje");
-    mensaje.innerHTML = `👋 Hola <b>${nombre}</b><br><br>🧩 Compraste los cartones:<br><b>${cartones.join(", ")}</b><br><br>⏳ Tu compra está en revisión.<br>🍀✨ ¡Mucha suerte te desea <b>Bingo Magic</b>!`;
-    modal.style.display = "flex";
-  };
+  if (cartonesSeleccionados.has(num)) {
+    cartonesSeleccionados.delete(num);
+  } else {
+    cartonesSeleccionados.add(num);
+  }
 
-  window.cerrarModalConfirm = function() {
-    document.getElementById("modalConfirm").style.display = "none";
-    window.location.href = "login.html"; 
-  };
+  renderGrid();
+  actualizarMonto();
+}
 
-  window.enviar = async function() {
-    if (envioEnProgreso) return;
-    const btn = document.querySelector(".comprobante-btn");
-    const archivo = document.getElementById("comprobante").files[0];
+/* ============================
+      CALCULAR MONTO
+============================ */
+function actualizarMonto() {
+  const cantidad = cartonesSeleccionados.size;
+  const total = cantidad * precioCarton;
 
-    if (seleccionados.length === 0) return alert("Debes seleccionar al menos un cartón.");
-    if (!archivo) return alert("Debes subir el comprobante.");
+  montoPagarEl.innerHTML = `
+    👀DEBES TENER MINIMO: <strong>${total} VISTAS</strong><br>
+    🧮 Cartones seleccionados: <strong>${cantidad}</strong>
+  `;
+}
 
-    envioEnProgreso = true;
-    btn.disabled = true;
-    btn.style.opacity = "0.5";
-    btn.innerText = "Verificando números...";
+/* ============================
+      CARGAR OCUPADOS
+============================ */
+async function cargarOcupados(idBingo) {
+  cartonesOcupados.clear();
+  cartonesSeleccionados.clear();
+
+  const q = query(collection(db, "compras"), where("idBingo", "==", idBingo));
+  const snap = await getDocs(q);
+
+  snap.forEach((d) => {
+    const data = d.data();
+    if (!Array.isArray(data.cartones)) return;
+
+    if (data.estado !== "rechazado") {
+      data.cartones.forEach((n) => cartonesOcupados.add(Number(n)));
+    }
+  });
+
+  renderGrid();
+  actualizarMonto();
+}
+
+/* ============================
+      CLOUDINARY
+============================ */
+async function subirACloudinary(archivo) {
+  const url = "https://api.cloudinary.com/v1_1/dtmepdpgo/image/upload";
+  const formData = new FormData();
+  formData.append("file", archivo);
+  formData.append("upload_preset", "bingo_uploads");
+
+  const respuesta = await fetch(url, { method: "POST", body: formData });
+  const data = await respuesta.json();
+  return data.secure_url;
+}
+
+/* ============================
+      ELEMENTOS
+============================ */
+const inputComprobante = document.getElementById("inputComprobante");
+const btnSubirComprobante = document.getElementById("btnSubirComprobante");
+const modalSubiendo = document.getElementById("modalSubiendo");
+
+/* ============================
+      SUBIR COMPROBANTE
+============================ */
+btnSubirComprobante.addEventListener("click", () => {
+  inputComprobante.click();
+});
+
+inputComprobante.addEventListener("change", async (e) => {
+  const archivo = e.target.files[0];
+  if (!archivo) return;
+
+  try {
+    modalSubiendo.style.display = "flex";
+
+    const url = await subirACloudinary(archivo);
+
+    await addDoc(collection(db, "comprobantes"), {
+      usuario: localStorage.getItem("nombre"),
+      telefono: localStorage.getItem("telefono"),
+      url: url,
+      fecha: Timestamp.now()
+    });
+
+    modalSubiendo.style.display = "none";
+
+    btnSubirComprobante.textContent = "📎 Comprobante subido";
+    btnSubirComprobante.style.background = "#4b5563";
+    btnSubirComprobante.style.color = "white";
+    btnSubirComprobante.style.cursor = "default";
+    btnSubirComprobante.disabled = true;
+
+  } catch (err) {
+    console.error(err);
+    modalSubiendo.style.display = "none";
+    alert("Error subiendo comprobante.");
+  }
+});
+
+/* ============================
+      CONFIRMAR COMPRA
+============================ */
+async function confirmarCompra() {
+  const nombre = localStorage.getItem("nombre") || "";
+  const telefono = localStorage.getItem("telefono") || "";
+
+  if (!btnSubirComprobante.disabled) {
+    alert("Debes subir el comprobante antes de confirmar la compra.");
+    return;
+  }
+
+  if (cartonesSeleccionados.size === 0) {
+    alert("Debes seleccionar al menos un cartón.");
+    return;
+  }
+
+  const cartonesArray = Array.from(cartonesSeleccionados);
+  const ref = doc(db, "bingos", bingoActual, "estado", "cartones");
 
     try {
-      const imagenURL = await subirACloudinary(archivo);
+    await runTransaction(db, async (transaction) => {
+      const snap = await transaction.get(ref);
+      let estado = snap.exists() ? snap.data() : {};
 
-      // TRANSACCIÓN CORREGIDA PARA RAMÓN Y MARÍA
-      await runTransaction(db, async (transaction) => {
-        let ocupados = [];
-        for (let num of seleccionados) {
-          const cartonRef = doc(db, "cartones", num.toString());
-          const snap = await transaction.get(cartonRef);
-          if (snap.exists()) {
-            const st = snap.data().estado;
-            if (st === "reservado" || st === "vendido") {
-              ocupados.push(num);
-            }
-          }
+      for (let n of cartonesArray) {
+        if (estado[n] && estado[n] !== "libre") {
+          throw new Error("OCUPADO_" + n);
         }
+      }
 
-        if (ocupados.length > 0) {
-          // Si el cartón se ocupó mientras Ramón/María hacían el proceso, lanzamos el error aquí.
-          throw `El cartón ${ocupados.join(", ")} no está disponible, cámbialo para continuar.`;
-        }
-
-        const nuevaCompraRef = doc(collection(db, "compras"));
-        transaction.set(nuevaCompraRef, {
-          usuario: nombreUsuario,
-          telefono: telefonoUsuario,
-          cartones: seleccionados,
-          comprobante: imagenURL,
-          estado: "pendiente",
-          fecha: Timestamp.now()
-        });
-
-        for (let num of seleccionados) {
-          transaction.set(doc(db, "cartones", num.toString()), { estado: "reservado" }, { merge: true });
-        }
+      cartonesArray.forEach(n => {
+        estado[n] = "ocupado";
       });
 
-      mostrarModalConfirm(nombreUsuario, seleccionados);
-      envioEnProgreso = false;
-      btn.disabled = false;
-      btn.style.opacity = "1";
-      btn.innerText = "🛒 Enviar Compra";
-
-    } catch (error) {
-      console.error("ERROR:", error);
-      let nums = [];
-      if (typeof error === "string") {
-        const match = error.match(/\d+/g);
-        if (match) nums = match.map(n => parseInt(n));
-      }
-
-      if (nums.length > 0) {
-        // Filtramos para que no pierda los que sí estaban libres, solo quite los ocupados
-        seleccionados = seleccionados.filter(n => !nums.includes(n));
-        mostrarModalError(nums);
+      if (snap.exists()) {
+        transaction.update(ref, estado);
       } else {
-        alert("Ocurrió un error. Inténtalo de nuevo.");
+        transaction.set(ref, estado);
       }
+    });
 
-      envioEnProgreso = false;
-      btn.disabled = false;
-      btn.style.opacity = "1";
-      btn.innerText = "🛒 Enviar Compra";
-      await cargarBloqueados();
-      renderizarCartones();
+    await addDoc(collection(db, "compras"), {
+      usuario: nombre,
+      telefono: telefono,
+      idBingo: bingoActual,
+      cartones: cartonesArray,
+      estado: "pendiente",
+      fecha: Timestamp.now()
+    });
+
+    mostrarModalConfirmacion(nombre, cartonesArray);
+
+    cartonesSeleccionados.clear();
+    await cargarOcupados(bingoActual);
+    actualizarMonto();
+
+  } catch (error) {
+    console.error("Error en confirmarCompra:", error);
+
+    if (error.message && error.message.startsWith("OCUPADO_")) {
+      const num = error.message.replace("OCUPADO_", "");
+      mostrarModalNoDisponible(num);
+      return;
     }
-  };
+
+    alert("Error inesperado. Intenta de nuevo.");
+  }
+}
+
+/* ============================
+      MODAL CONFIRMACIÓN
+============================ */
+function mostrarModalConfirmacion(nombre, cartones) {
+  document.getElementById("modalNombre").innerHTML =
+    `👋 Hola <strong>${nombre}</strong>`;
+  document.getElementById("modalCartones").innerHTML =
+    `🎟 Cartones: <strong>${cartones.join(", ")}</strong>`;
+
+  document.getElementById("modalConfirmacion").style.display = "flex";
+}
+
+window.cerrarModalConfirmacion = function () {
+  window.location.href = "login.html";
+};
+
+/* ============================
+      MODAL NO DISPONIBLE
+============================ */
+window.mostrarModalNoDisponible = function (num) {
+  const modal = document.getElementById("modalNoDisponible");
+  const texto = document.getElementById("modalNoDisponibleTexto");
+
+  texto.innerHTML = `
+    El cartón <strong>#${num}</strong> no está disponible 😢<br>
+    Por favor selecciona otro ✨
+  `;
+
+  modal.style.display = "flex";
+};
+
+window.cerrarModalNoDisponible = async function () {
+  document.getElementById("modalNoDisponible").style.display = "none";
+  await cargarOcupados(bingoActual);
+  renderGrid();
+};
+
+/* ============================
+      EVENTOS FINALES
+============================ */
+btnConfirmar.addEventListener("click", confirmarCompra);
+
+(async function init() {
+  cargarUsuario();
+  await cargarBingos();
+})();
 </script>
+
+<!-- MODAL CARTÓN NO DISPONIBLE (FALTABA) -->
+<div id="modalNoDisponible" style="
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.85);
+  justify-content:center;
+  align-items:center;
+  z-index:99999;
+">
+  <div style="
+    background:#1e293b;
+    padding:25px;
+    border-radius:15px;
+    width:90%;
+    max-width:350px;
+    color:#e2e8f0;
+    text-align:center;
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
+  ">
+    <h2 style="margin-top:0; color:#f87171;">❌ No disponible</h2>
+
+    <p id="modalNoDisponibleTexto" style="font-size:16px; margin-bottom:10px;"></p>
+
+    <button onclick="cerrarModalNoDisponible()" style="
+      margin-top:20px;
+      width:100%;
+      padding:12px;
+      background:#f87171;
+      border:none;
+      border-radius:10px;
+      font-weight:600;
+      cursor:pointer;
+      color:#0f172a;
+      font-size:15px;
+    ">
+      Entendido
+    </button>
+  </div>
+</div>
+
 </body>
 </html>
